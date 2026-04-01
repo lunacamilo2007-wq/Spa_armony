@@ -17,7 +17,6 @@ class UpdateMasajistaRequest extends FormRequest
         $cedula = $this->route('masajista');
 
         return [
-            'cedula'   => 'required|digits_between:6,10|unique:masajistas,cedula,' . $cedula,
             'nombre'   => 'required|string|max:100',
             'telefono' => 'required|digits_between:7,10',
         ];
