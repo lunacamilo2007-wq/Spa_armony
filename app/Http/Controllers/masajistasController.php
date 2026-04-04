@@ -6,15 +6,20 @@ use Illuminate\Http\Request;
 use App\Models\Masajista;
 use App\Http\Requests\StoreMasajistaRequest;
 use App\Http\Requests\UpdateMasajistaRequest;
+use App\Services\Masajistas\MasajistasService;
 
 class masajistasController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(protected MasajistasService $service)
+    {
+
+    }
     public function index()
     {
-         $masajistas = Masajista::all();
+        $masajistas = Masajista::all();
         return view('masajistas.index', compact('masajistas'));
     }
 
@@ -31,17 +36,18 @@ class masajistasController extends Controller
      */
     public function store(StoreMasajistaRequest $request)
     {
-        Masajista::create($request->only(['cedula', 'nombre', 'telefono']));
+        $this->service->create($request->validated());
         return redirect()->route('masajistas.index')
-                         ->with('success', 'Masajista registrado exitosamente.');      
-    } 
+            ->with('success', 'Masajista registrado exitosamente.');
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $masajista = Masajista::find($id);
+        return view('masajistas.show', compact('masajista'));
     }
 
     /**
@@ -49,7 +55,7 @@ class masajistasController extends Controller
      */
     public function edit(string $id)
     {
-         $masajista = Masajista::findOrFail($id);
+        $masajista = Masajista::findOrFail($id);
         return view('masajistas.edit', compact('masajista'));
     }
 
@@ -58,10 +64,10 @@ class masajistasController extends Controller
      */
     public function update(UpdateMasajistaRequest $request, string $id)
     {
-         $masajista = Masajista::findOrFail($id);
+        $masajista = Masajista::findOrFail($id);
         $masajista->update($request->only(['nombre', 'telefono']));
         return redirect()->route('masajistas.index')
-                         ->with('success', 'Masajista actualizado correctamente.');
+            ->with('success', 'Masajista actualizado correctamente.');
     }
 
     /**
@@ -72,6 +78,6 @@ class masajistasController extends Controller
         $masajista = Masajista::findOrFail($id);
         $masajista->delete();
         return redirect()->route('masajistas.index')
-                         ->with('success', 'Masajista eliminado correctamente.');
+            ->with('success', 'Masajista eliminado correctamente.');
     }
 }
