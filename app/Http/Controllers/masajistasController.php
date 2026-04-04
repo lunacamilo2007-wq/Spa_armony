@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Masajista;
-use App\Http\Requests\StoreMasajistaRequest;
-use App\Http\Requests\UpdateMasajistaRequest;
+use App\Models\Servicios;
+use App\Http\Requests\Masajistas\StoreMasajistaRequest;
+use App\Http\Requests\Masajistas\UpdateMasajistaRequest;
 use App\Services\Masajistas\MasajistasService;
 
 class masajistasController extends Controller
@@ -28,7 +29,8 @@ class masajistasController extends Controller
      */
     public function create()
     {
-        return view('masajistas.create');
+        $servicios = Servicios::all();
+        return view('masajistas.create', compact('servicios'));
     }
 
     /**
@@ -47,7 +49,8 @@ class masajistasController extends Controller
     public function show(string $id)
     {
         $masajista = Masajista::find($id);
-        return view('masajistas.show', compact('masajista'));
+        $servicios = Servicios::all();
+        return view('masajistas.show', compact('masajista', 'servicios'));
     }
 
     /**
@@ -56,7 +59,8 @@ class masajistasController extends Controller
     public function edit(string $id)
     {
         $masajista = Masajista::findOrFail($id);
-        return view('masajistas.edit', compact('masajista'));
+        $servicios = Servicios::all();
+        return view('masajistas.edit', compact('masajista', 'servicios'));
     }
 
     /**
@@ -64,8 +68,7 @@ class masajistasController extends Controller
      */
     public function update(UpdateMasajistaRequest $request, string $id)
     {
-        $masajista = Masajista::findOrFail($id);
-        $masajista->update($request->only(['nombre', 'telefono']));
+        $masajista = $this->service->update($id, $request->validated());
         return redirect()->route('masajistas.index')
             ->with('success', 'Masajista actualizado correctamente.');
     }
@@ -75,8 +78,7 @@ class masajistasController extends Controller
      */
     public function destroy(string $id)
     {
-        $masajista = Masajista::findOrFail($id);
-        $masajista->delete();
+        $this->service->delete($id);
         return redirect()->route('masajistas.index')
             ->with('success', 'Masajista eliminado correctamente.');
     }

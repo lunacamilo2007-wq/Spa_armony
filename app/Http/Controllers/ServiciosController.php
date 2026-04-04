@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Servicios;
+use App\Http\Requests\Servicios\StoreServiciosRequest;
+use App\Http\Requests\Servicios\UpdateServiciosRequest;
+use App\Services\Servicios\ServiciosService;
 
 class ServiciosController extends Controller
 {
+    public function __construct(protected ServiciosService $service)
+    {
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -27,9 +34,9 @@ class ServiciosController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreServiciosRequest $request)
     {
-        Servicios::create($request->only(['nombre_servicio', 'precio', 'descripcion']));
+        $this->service->create($request->validated());
         return redirect()->route('servicios.index')
             ->with('success', 'servicio registrado exitosamente. ');
     }
@@ -54,10 +61,9 @@ class ServiciosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateServiciosRequest $request, string $id)
     {
-        $servicio = Servicios::findOrFail($id);
-        $servicio->update($request->only(['nombre_servicio', 'precio', 'descripcion']));
+        $this->service->update($id, $request->validated());
         return redirect()->route('servicios.index')
             ->with('success', 'Servicio actualizado correctamente.');
     }
@@ -67,8 +73,7 @@ class ServiciosController extends Controller
      */
     public function destroy(string $id)
     {
-        $servicio = Servicios::findOrFail($id);
-        $servicio->delete();
+        $this->service->delete($id);
         return redirect()->route('servicios.index')
             ->with('success', 'Servicio eliminado correctamente.');
     }

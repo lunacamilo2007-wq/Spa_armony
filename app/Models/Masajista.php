@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Masajista extends Model
 {
@@ -22,5 +23,21 @@ class Masajista extends Model
         'cedula',
         'nombre',
         'telefono',
+        'porcentaje_comision'
     ];
+
+    public function calcularComision($precio)
+    {
+        return ($this->porcentaje_comision / 100) * $precio;
+    }
+
+    public function servicios(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Servicios::class,
+            'masa_servicio',
+            'id_masajista',
+            'id_servicio'
+        );
+    }
 }
