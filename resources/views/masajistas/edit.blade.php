@@ -2,6 +2,7 @@
 
 @section('titulo', 'Editar Masajista')
 
+
 @section('contenido')
 
     <h1>Editar Masajista</h1>
@@ -54,8 +55,7 @@
             @foreach ($servicios as $servicio)
                 <div style="margin-bottom: 5px;">
                     <input type="checkbox" name="servicios[]" id="servicio_{{ $servicio->id_servicio }}"
-                        value="{{ $servicio->id_servicio }}"
-                        {{ $masajista->servicios->contains('id_servicio', $servicio->id_servicio) ? 'checked' : '' }}>
+                        value="{{ $servicio->id_servicio }}" {{ $masajista->servicios->contains('id_servicio', $servicio->id_servicio) ? 'checked' : '' }}>
                     <label for="servicio_{{ $servicio->id_servicio }}">{{ $servicio->nombre_servicio }} -
                         ${{ number_format($servicio->precio, 2) }}</label>
                 </div>

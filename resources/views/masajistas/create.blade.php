@@ -2,6 +2,8 @@
 
 @section('titulo', 'Nuevo Masajista')
 
+
+
 @section('contenido')
 
     <h1>Nuevo Masajista</h1>

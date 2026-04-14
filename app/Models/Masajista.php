@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Masajista extends Model
 {
@@ -39,5 +40,10 @@ class Masajista extends Model
             'id_masajista',
             'id_servicio'
         );
+    }
+
+    public function citas(): HasMany
+    {
+        return $this->hasMany(Citas::class, 'masajista', 'cedula');
     }
 }
