@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Clientes;
 use App\Models\Masajista;
 use App\Models\Servicios;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class AdminController extends Controller
         // $citasPendientes = Cita::where('estado', 'pendiente')->count();
         // $citasConfirmadas = Cita::where('estado', 'confirmada')->count();
         // $citasHoy = Cita::whereDate('fecha', today())->count();
-        // $totalClientes = Cliente::count();
+        $totalClientes = Clientes::count();
         $totalMasajistas = Masajista::count();
         $totalServicios = Servicios::count();
 
@@ -33,7 +34,7 @@ class AdminController extends Controller
             // 'citasPendientes',
             // 'citasConfirmadas',
             // 'citasHoy',
-            // 'totalClientes',
+            'totalClientes',
             'totalMasajistas',
             'totalServicios',
             // 'citasRecientes', 

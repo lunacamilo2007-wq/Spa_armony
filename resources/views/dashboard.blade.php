@@ -37,7 +37,7 @@
                 </div>--}}
 
                 {{--Total Clientes --}}
-                {{-- <div class="stat">
+                <div class="stat">
                     <div class="flex">
                         <div class="w-12">
                             <svg></svg>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="text">{{ $totalClientes }}</div>
                     <div class="text-sm">Clientes</div>
-                </div> --}}
+                </div>
 
                 {{-- Masajistas --}}
                 -<div class="stat">
@@ -62,21 +62,21 @@
             {{-- Acciones rapidas --}}
             <div class="grid">
                 {{-- Acciones rapidas --}}
-                {{--<div class="card">
+                <div class="card">
                     <h2>Acciones rapidas</h2>
                     <div class="space">
-                        <a href="{{ route('citas.create') }}">
+                        {{--<a href="{{ route('citas.create') }}">
                             <div class="w-10">
                                 <svg></svg>
                             </div>
                             <span class="font-medium">Nueva Cita</span>
-                        </a>
+                        </a>--}}
                         <a href="{{ route('clientes.index') }}">
                             <div class="w-10">
                                 <svg></svg>
                             </div>
                             <span class="font-medium">Ver Clientes</span>
-                        </a>--}}
+                        </a>
                         <a href="{{ route('masajistas.index') }}">
                             <div class="w-10">
                                 <svg></svg>
