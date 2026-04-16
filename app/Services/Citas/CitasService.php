@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Citas;
 use App\Models\Citas;
+use App\Models\Clientes;
 use Illuminate\Support\Facades\DB;
 
 class CitasService
@@ -12,6 +13,18 @@ class CitasService
     public function create(array $data): Citas
     {
         return DB::transaction(function () use ($data) {
+
+            // Crear el cliente si fue proporcionado por formulario
+            if (isset($data['es_nuevo_cliente']) && $data['es_nuevo_cliente']) {
+                $cliente = Clientes::create([
+                    'cedula'   => $data['nuevo_cliente_cedula'],
+                    'nombre'   => $data['nuevo_cliente_nombre'],
+                    'telefono' => $data['nuevo_cliente_telefono'],
+                    'correo'   => $data['nuevo_cliente_correo'],
+                ]);
+                $data['id_cliente'] = $cliente->cedula;
+            }
+
             // Forzar estado inicial a pendiente
             $data['estado'] = 'pendiente';
 

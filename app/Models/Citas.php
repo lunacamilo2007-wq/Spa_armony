@@ -12,7 +12,7 @@ class Citas extends Model
 
     protected $primaryKey = "id_cita";
 
-    protected $incrementing = true;
+    public $incrementing = true;
 
     protected $keyType = "int";
 

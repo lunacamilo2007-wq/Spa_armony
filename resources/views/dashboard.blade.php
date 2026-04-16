@@ -65,12 +65,12 @@
                 <div class="card">
                     <h2>Acciones rapidas</h2>
                     <div class="space">
-                        {{--<a href="{{ route('citas.create') }}">
+                        <a href="{{ route('citas.create') }}">
                             <div class="w-10">
                                 <svg></svg>
                             </div>
                             <span class="font-medium">Nueva Cita</span>
-                        </a>--}}
+                        </a>
                         <a href="{{ route('clientes.index') }}">
                             <div class="w-10">
                                 <svg></svg>

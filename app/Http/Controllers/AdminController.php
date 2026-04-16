@@ -37,7 +37,7 @@ class AdminController extends Controller
             'totalClientes',
             'totalMasajistas',
             'totalServicios',
-            // 'citasRecientes', 
+            //'citasRecientes',
         ));
     }
 
