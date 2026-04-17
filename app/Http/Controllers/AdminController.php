@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Citas;
 use App\Models\Clientes;
 use App\Models\Masajista;
 use App\Models\Servicios;
@@ -16,28 +17,29 @@ class AdminController extends Controller
      */
     public function dashboard(): View
     {
-        // $totalCitas = Cita::count();
-        // $citasPendientes = Cita::where('estado', 'pendiente')->count();
+        $totalCitas = Citas::count();
+        $citasPendientes = Citas::where('estado', 'pendiente')->count();
         // $citasConfirmadas = Cita::where('estado', 'confirmada')->count();
-        // $citasHoy = Cita::whereDate('fecha', today())->count();
+        $citasHoy = Citas::whereDate('fecha', today())->count();
         $totalClientes = Clientes::count();
         $totalMasajistas = Masajista::count();
         $totalServicios = Servicios::count();
 
-        // $citasRecientes = Cita::with('cliente', 'masajistaRelation', 'servicios')
-        //     ->orderBy('fecha', 'desc')
-        //     ->limit(5)
-        //     ->get();
+        $citasparahoy = Citas::with(['cliente', 'masajistaRel', 'servicios'])
+            ->whereBetween('fecha', [now(), now()->endOfDay()])
+            ->orderBy('fecha', 'asc')
+            ->limit(5)
+            ->get();
 
         return view('dashboard', compact(
-            // 'totalCitas',
-            // 'citasPendientes',
+            'totalCitas',
+            'citasPendientes',
             // 'citasConfirmadas',
-            // 'citasHoy',
+            'citasHoy',
             'totalClientes',
             'totalMasajistas',
             'totalServicios',
-            //'citasRecientes',
+            'citasparahoy',
         ));
     }
 
