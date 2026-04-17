@@ -55,9 +55,9 @@ php artisan key:generate
 Por ahora está pre-configurado para que tu base de datos y tus "sesiones" funcionen sin problemas a nivel de archivos temporales en local. Solo debes asegurar que las tablas se creen:
 
 ```bash
-php artisan migrate:fresh --seed
+php artisan migrate:fresh
 ```
-*💡 **Nota:** La bandera `--seed` llenará la base de datos mágicamente con Citas, Clientes y Masajistas de prueba, además del usuario Administrador principal.*
+
 
 ### 4. Compilar Diseño y Encender Servidor
 Finalmente, debes decirle a Node que consolide los estilos modernos en `app.css` y luego encender Laravel:
@@ -71,13 +71,6 @@ php artisan serve
 ```
 
 ---
-
-## 🔑 Credenciales por Defecto (Acceso Root)
-
-Al navegar hacia `http://localhost:8000/login`, podrás entrar con las credenciales que se crearon en las pruebas locales:
-
-*   **Usuario:** `admin`
-*   **Contraseña:** `admin123`
 
 ## 🧪 Validar Código (Opcional)
 Si eres desarrollador y deseas validar que todas las lógicas creadas se mantengan intactas, ejecuta la suite completa de pruebas automáticas:
