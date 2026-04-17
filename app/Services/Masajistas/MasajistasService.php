@@ -6,6 +6,22 @@ use Illuminate\Support\Facades\DB;
 
 class MasajistasService
 {
+    // Dentro de tu Service
+
+    public function obtenerMasajistas($search = null)
+    {
+        $query = DB::table("masajistas");
+
+        if ($search) {
+            // Agrupamos la lógica en un closure (función anónima)
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'like', "%{$search}%")
+                    ->orWhere('cedula', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->get();
+    }
     /**
      * Crear masajista + servicios en pivot dentro de una transacción.
      * Si falla cualquier insert, se hace rollback completo.

@@ -20,6 +20,15 @@
                 </a>
             </div>
 
+            <div class="card p-4 mb-6">
+                <form method="GET" action="{{ route('masajistas.index') }}">
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Buscar por nombre o cédula..." class="input-field" id="search-masajistas">
+                    <button type="submit" class="btn-primary">Buscar</button>
+                    <a href="{{ route('masajistas.index') }}" class="btn-primary">Limpiar</a>
+                </form>
+            </div>
+
             {{-- Table --}}
             <div class="table-container">
                 <table>

@@ -17,10 +17,10 @@ class CitasService
             // Crear el cliente si fue proporcionado por formulario
             if (isset($data['es_nuevo_cliente']) && $data['es_nuevo_cliente']) {
                 $cliente = Clientes::create([
-                    'cedula'   => $data['nuevo_cliente_cedula'],
-                    'nombre'   => $data['nuevo_cliente_nombre'],
+                    'cedula' => $data['nuevo_cliente_cedula'],
+                    'nombre' => $data['nuevo_cliente_nombre'],
                     'telefono' => $data['nuevo_cliente_telefono'],
-                    'correo'   => $data['nuevo_cliente_correo'],
+                    'correo' => $data['nuevo_cliente_correo'],
                 ]);
                 $data['id_cliente'] = $cliente->cedula;
             }
@@ -92,14 +92,16 @@ class CitasService
         $cita = Citas::where('id_cita', $id)->firstOrFail();
 
         $transicionesValidas = [
-            'pendiente'  => ['confirmada', 'cancelada'],
+            'pendiente' => ['confirmada', 'cancelada'],
             'confirmada' => ['finalizada', 'cancelada'],
         ];
 
         $estadoActual = $cita->estado;
 
-        if (!isset($transicionesValidas[$estadoActual])
-            || !in_array($status, $transicionesValidas[$estadoActual])) {
+        if (
+            !isset($transicionesValidas[$estadoActual])
+            || !in_array($status, $transicionesValidas[$estadoActual])
+        ) {
             throw new \InvalidArgumentException(
                 "No se puede pasar de '{$estadoActual}' a '{$status}'."
             );

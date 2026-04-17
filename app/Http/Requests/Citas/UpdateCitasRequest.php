@@ -36,6 +36,13 @@ class UpdateCitasRequest extends FormRequest
         $validator->after(function ($validator) {
             $citaId = $this->route('cita');
 
+            if ($this->fecha) {
+                $hora = (int) date('H', strtotime($this->fecha));
+                if ($hora < 8 || $hora >= 19) {
+                    $validator->errors()->add('fecha', 'Las citas solo pueden programarse entre las 8:00 AM y las 7:00 PM.');
+                }
+            }
+
             if ($this->fecha && $this->masajista) {
                 $conflicto = Citas::where('masajista', $this->masajista)
                     ->where('fecha', $this->fecha)

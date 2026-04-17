@@ -18,9 +18,10 @@ class masajistasController extends Controller
     {
 
     }
-    public function index()
+    public function index(Request $request)
     {
-        $masajistas = Masajista::all();
+        $search = $request->input('search');
+        $masajistas = $this->service->obtenerMasajistas($search);
         return view('masajistas.index', compact('masajistas'));
     }
 

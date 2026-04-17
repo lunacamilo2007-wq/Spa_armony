@@ -144,7 +144,6 @@
 
                             <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 
-                                {{-- Fecha y Hora --}}
                                 <div class="mb-4" x-data="{ fechaHora: '' }" x-init="
     flatpickr($refs.miCalendario, {
         enableTime: true,          // Habilita la selección de hora
@@ -153,7 +152,7 @@
         time_24hr: false,          // Usa AM/PM (o true si prefieres formato 24h)
         minDate: 'today',          // No permite agendar citas en el pasado
         minTime: '08:00',          // Opcional: Hora de apertura
-        maxTime: '20:00',          // Opcional: Hora de cierre
+        maxTime: '19:00',          // Opcional: Hora de cierre
         minuteIncrement: 15,       // Los minutos saltan de 15 en 15 (ideal para citas)
     })
 ">
@@ -218,8 +217,8 @@
                                             <span class="text-red-500">*</span></legend>
                                         <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             @foreach($servicios as $servicio)
-                                                <div
-                                                    class="relative flex items-start p-4 border border-gray-200 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                                                <div 
+                                                    class="relative flex items-center p-4 border border-gray-200 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
                                                     <div class="flex h-6 items-center">
                                                         <input id="servicio_{{ $servicio->id_servicio }}" name="servicios[]"
                                                             value="{{ $servicio->id_servicio }}" type="checkbox"
@@ -232,6 +231,13 @@
                                                             {{ $servicio->nombre_servicio }}
                                                         </label>
                                                         <p class="text-gray-500">${{ number_format($servicio->precio, 0) }}</p>
+                                                    </div>
+                                                    <div class="flex items-center gap-2 ml-4 shrink-0">
+                                                        <span class="text-xs text-gray-500 font-medium">Duración:</span>
+                                                        <input type="number" name="duraciones[{{ $servicio->id_servicio }}]" 
+                                                            class="w-16 px-1 py-1 border border-gray-300 rounded-lg text-sm text-center focus:ring-primary-500 focus:border-primary-500" 
+                                                            value="{{ old('duraciones.'.$servicio->id_servicio,60) }}" >
+                                                        <span class="text-xs text-gray-500">min</span>
                                                     </div>
                                                 </div>
                                             @endforeach

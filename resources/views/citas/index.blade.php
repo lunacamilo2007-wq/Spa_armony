@@ -2,30 +2,175 @@
 
 @section('titulo', 'Historial de Citas')
 
+@push('styles')
+    <style>
+        /* Personalización de FullCalendar para que coincida con el estilo de la app */
+        .fc {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fc-theme-standard td,
+        .fc-theme-standard th {
+            border-color: #e5e7eb;
+        }
+
+        .fc-theme-standard .fc-scrollgrid {
+            border-color: #e5e7eb;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111827;
+            text-transform: capitalize;
+        }
+
+        .fc .fc-button-primary {
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+            color: #374151;
+            text-transform: capitalize;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .fc .fc-button-primary:not(:disabled):active,
+        .fc .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: #dbeafe !important;
+            border-color: #bfdbfe !important;
+            color: #1e40af !important;
+        }
+
+        .fc .fc-button-primary:hover {
+            background-color: #e5e7eb;
+            border-color: #d1d5db;
+            color: #111827;
+        }
+
+        .fc .fc-daygrid-day.fc-day-today {
+            background-color: #eff6ff;
+        }
+
+        .fc-event {
+            cursor: pointer;
+            border: none;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-bottom: 2px;
+            transition: transform 0.1s;
+        }
+
+        .fc-event:hover {
+            transform: scale(1.02);
+        }
+
+        /* Colores según estado */
+        .fc-event.bg-pendiente {
+            background-color: #fef3c7;
+            color: #b45309;
+        }
+
+        .fc-event.bg-confirmada {
+            background-color: #e0e7ff;
+            color: #4338ca;
+        }
+
+        .fc-event.bg-finalizada {
+            background-color: #d1fae5;
+            color: #047857;
+        }
+
+        .fc-event.bg-cancelada {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .fc-daygrid-day-number {
+            color: #374151;
+            font-weight: 500;
+            text-decoration: none !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            padding: 8px 0;
+            text-decoration: none !important;
+        }
+
+        .fc-daygrid-day {
+            transition: background-color 0.2s;
+        }
+
+        .fc-daygrid-day:hover {
+            background-color: #f9fafb;
+            cursor: pointer;
+        }
+    </style>
+@endpush
+
 @section('contenido')
-    <div class="bg-surface-50 min-h-[calc(100vh-4rem)]" id="citas-index-page">
+    <div class="bg-surface-50 min-h-[calc(100vh-4rem)]" id="citas-index-page" x-data="citasCalendario()">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
             {{-- Header --}}
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Historial de Citas</h1>
-                    <p class="text-primary-600 text-sm mt-0.5">{{ $citas->count() }} citas</p>
+                    <h1 class="text-2xl font-bold text-gray-900"
+                        x-text="view === 'calendar' ? 'Calendario de Citas' : 'Citas del día'">Historial de Citas</h1>
+                    <p class="text-primary-600 text-sm mt-0.5" x-show="view === 'calendar'">{{ $citas->count() }} citas
+                        registradas</p>
+                    <p class="text-primary-600 text-sm mt-0.5 capitalize" x-show="view === 'list'"
+                        x-text="selectedDateFormatted" style="display: none;"></p>
+
+                    {{--<div x-show="view === 'list'">
+                        <label for="masajista" class="label-field">Filtrar citas por masajista: <span
+                                class="text-red-500">*</span></label>
+                        <select id="masajista" name="masajista" class="select-field">
+                            <option value="">Seleccione un masajista...</option>
+                            @foreach($masajistas as $mas)
+                            <option value="{{ $mas->cedula }}" {{ old('masajista')==$mas->cedula ? 'selected' : '' }}>
+                                {{ $mas->nombre }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>--}}
                 </div>
-                <a href="{{ route('citas.create') }}" class="btn-primary mt-4 sm:mt-0" id="btn-nueva-cita-page">
-                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Nueva Cita
-                </a>
+                <div class="flex items-center gap-3 mt-4 sm:mt-0">
+                    <button x-show="view === 'list'" @click="backToCalendar"
+                        class="btn-secondary bg-white border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        style="display: none;">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        Volver al Calendario
+                    </button>
+                    <a href="{{ route('citas.create') }}" class="btn-primary" id="btn-nueva-cita-page">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Nueva Cita
+                    </a>
+                </div>
             </div>
 
-            {{-- Citas List --}}
-            @if($citas->count() > 0)
-                <div class="space-y-4">
-                    @foreach($citas as $cita)
-                        <div class="card p-6 animate-fade-in" id="cita-{{ $cita->id_cita }}" x-data="{ open: false }"
-                            :class="{ 'relative z-50': open }">
+            {{-- Calendario View --}}
+            <div x-show="view === 'calendar'"
+                class="card p-6 animate-fade-in bg-white shadow-sm rounded-xl border border-gray-100">
+                <div id="calendar"></div>
+            </div>
+
+            {{-- List View --}}
+            <div x-show="view === 'list'" style="display: none;" class="animate-fade-in">
+                <div class="space-y-4" id="citas-list-container">
+                    @forelse($citas as $cita)
+                        <div class="card p-6 cita-card" data-date="{{ $cita->fecha->format('Y-m-d') }}" x-data="{ open: false }"
+                            :class="{ 'relative z-50': open }" style="display: none;">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-4">
                                 {{-- Avatar + Client Info --}}
                                 <div class="flex items-start gap-4 flex-1 min-w-0">
@@ -36,10 +181,6 @@
                                     <div class="min-w-0">
                                         <div class="flex items-center gap-2 flex-wrap">
                                             <h3 class="font-semibold text-gray-900">{{ $cita->cliente->nombre ?? 'N/A' }}</h3>
-                                            @if($cita->servicios->first())
-                                                <span class="text-sm text-gray-500">·
-                                                    {{ $cita->servicios->first()->nombre_servicio }}</span>
-                                            @endif
                                         </div>
                                         <div class="flex flex-wrap gap-x-6 gap-y-1 mt-2 text-sm text-gray-500">
                                             <span class="flex items-center gap-1">
@@ -78,7 +219,8 @@
                                         </div>
                                         <div class="text-xs text-gray-400 mt-1">
                                             Cédula: {{ $cita->cliente->cedula ?? '' }} · Tel:
-                                            {{ $cita->cliente->telefono ?? 'N/A' }} · Email: {{ $cita->cliente->correo ?? 'N/A' }}
+                                            {{ $cita->cliente->telefono ?? 'N/A' }} · Email:
+                                            {{ $cita->cliente->correo ?? 'N/A' }}
                                         </div>
                                         {{-- Service tags --}}
                                         <div class="flex flex-wrap gap-2 mt-3">
@@ -124,6 +266,8 @@
                                                         class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">✕
                                                         Cancelar</button>
                                                 </form>
+                                            @endif
+                                            @if($cita->estado === 'confirmada')
                                                 <form method="POST" action="{{ route('citas.finalize', $cita->id_cita) }}">
                                                     @csrf @method('PATCH')
                                                     <button type="submit"
@@ -151,18 +295,153 @@
                                 </div>
                             @endif
                         </div>
-                    @endforeach
+                    @empty
+                        {{-- Esto solo se muestra si NO hay citas en absoluto, aunque está manejado por FullCalendar
+                        principalmente --}}
+                    @endforelse
                 </div>
-            @else
-                <div class="card p-12 text-center">
+
+                {{-- Empty State for Day --}}
+                <div id="empty-day-state" style="display: none;" class="card p-12 text-center">
                     <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <p class="text-gray-500 text-lg">No se encontraron citas.</p>
-                    <a href="{{ route('citas.create') }}" class="btn-primary mt-4 inline-flex">Crear primera cita</a>
+                    <p class="text-gray-500 text-lg">No hay citas programadas para este día.</p>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
+
+    @push('scripts')
+        @php
+            $eventosCalendario = $citas->map(function ($cita) {
+                $estadoClass = match ($cita->estado) {
+                    'pendiente' => 'bg-pendiente',
+                    'confirmada' => 'bg-confirmada',
+                    'finalizada' => 'bg-finalizada',
+                    'cancelada' => 'bg-cancelada',
+                    default => 'bg-pendiente'
+                };
+
+                return [
+                    'id' => $cita->id_cita,
+                    'title' => ($cita->cliente->nombre ?? 'Sin Cliente') . ' - ' . ($cita->servicios->first()->nombre_servicio ?? 'Cita'),
+                    'start' => $cita->fecha->format('Y-m-d\TH:i:s'),
+                    'className' => $estadoClass,
+                    'extendedProps' => [
+                        'estado' => $cita->estado,
+                    ]
+                ];
+            });
+        @endphp
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+        <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.11/locales/es.global.min.js'></script>
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('citasCalendario', () => ({
+                    view: 'calendar',
+                    selectedDate: null,
+                    selectedDateFormatted: '',
+                    calendar: null,
+
+                    init() {
+                        this.$nextTick(() => {
+                            this.initCalendar();
+                        });
+                    },
+
+                    initCalendar() {
+                        var calendarEl = document.getElementById('calendar');
+                        if (!calendarEl) return;
+
+                        var eventos = @json($eventosCalendario);
+
+                        this.calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            locale: 'es',
+                            height: 'auto',
+                            contentHeight: 'auto',
+                            headerToolbar: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                            },
+                            events: eventos,
+                            buttonText: {
+                                today: 'Hoy',
+                                month: 'Mes',
+                                week: 'Semana',
+                                day: 'Día',
+                                list: 'Lista'
+                            },
+                            eventTimeFormat: {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                meridiem: false,
+                                hour12: false
+                            },
+                            dateClick: (info) => {
+                                this.showDate(info.dateStr);
+                            },
+                            eventClick: (info) => {
+                                this.showDate(info.event.startStr.split('T')[0]);
+                            }
+                        });
+
+                        this.calendar.render();
+                    },
+
+                    showDate(dateStr) {
+                        this.selectedDate = dateStr;
+
+                        let parts = dateStr.split('-');
+                        let d = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+
+                        this.selectedDateFormatted = d.toLocaleDateString('es-ES', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            timeZone: 'UTC'
+                        });
+
+                        this.view = 'list';
+
+                        let cards = document.querySelectorAll('.cita-card');
+                        let count = 0;
+
+                        cards.forEach(card => {
+                            if (card.dataset.date === this.selectedDate) {
+                                card.style.display = 'block';
+                                count++;
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+
+                        let emptyState = document.getElementById('empty-day-state');
+                        if (emptyState) {
+                            emptyState.style.display = count === 0 ? 'block' : 'none';
+                        }
+
+                        let btnCreate = document.getElementById('btn-create-cita-day');
+                        if (btnCreate) {
+                            btnCreate.href = "{{ route('citas.create') }}" + "?fecha=" + dateStr;
+                        }
+                    },
+
+                    backToCalendar() {
+                        this.view = 'calendar';
+                        this.selectedDate = null;
+                        this.$nextTick(() => {
+                            if (this.calendar) {
+                                this.calendar.updateSize();
+                            }
+                        });
+                    }
+                }));
+            });
+        </script>
+    @endpush
 @endsection
