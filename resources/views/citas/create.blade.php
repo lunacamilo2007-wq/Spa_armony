@@ -232,13 +232,6 @@
                                                         </label>
                                                         <p class="text-gray-500">${{ number_format($servicio->precio, 0) }}</p>
                                                     </div>
-                                                    <div class="flex items-center gap-2 ml-4 shrink-0">
-                                                        <span class="text-xs text-gray-500 font-medium">Duración:</span>
-                                                        <input type="number" name="duraciones[{{ $servicio->id_servicio }}]" 
-                                                            class="w-16 px-1 py-1 border border-gray-300 rounded-lg text-sm text-center focus:ring-primary-500 focus:border-primary-500" 
-                                                            value="{{ old('duraciones.'.$servicio->id_servicio,60) }}" >
-                                                        <span class="text-xs text-gray-500">min</span>
-                                                    </div>
                                                 </div>
                                             @endforeach
                                         </div>
