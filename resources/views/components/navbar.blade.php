@@ -1,6 +1,5 @@
 {{-- Navbar Component --}}
-<header
-    class="sticky top-0 z-40 bg-white/80 dark:bg-surface-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-surface-700 transition-colors duration-300"
+<header class="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-100 transition-colors duration-300"
     id="main-navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -15,15 +14,15 @@
                     </svg>
                 </div>
                 <div>
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">SPA Armonía</span>
-                    <span class="block text-xs text-gray-500 dark:text-gray-400 -mt-0.5">Panel de Administración</span>
+                    <span class="text-xl font-bold text-gray-900">SPA Armonía</span>
+                    <span class="block text-xs text-gray-500 -mt-0.5">Panel de Administración</span>
                 </div>
             </a>
 
             {{-- Desktop Nav --}}
             <nav class="hidden md:flex items-center gap-1" id="desktop-nav">
                 <a href="{{ route('dashboard') }}"
-                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-primary-700 bg-primary-50 dark:text-primary-400 dark:bg-surface-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-surface-700' }} transition-colors">
+                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-primary-700 bg-primary-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition-colors">
                     <span class="flex items-center gap-1.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,7 +32,7 @@
                     </span>
                 </a>
                 <a href="{{ route('citas.index') }}"
-                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('citas.*') ? 'text-primary-700 bg-primary-50 dark:text-primary-400 dark:bg-surface-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-surface-700' }} transition-colors">
+                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('citas.*') ? 'text-primary-700 bg-primary-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition-colors">
                     <span class="flex items-center gap-1.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,28 +41,8 @@
                         Citas
                     </span>
                 </a>
-                <a href="{{ route('servicios.index') }}"
-                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('servicios.*') ? 'text-primary-700 bg-primary-50 dark:text-primary-400 dark:bg-surface-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-surface-700' }} transition-colors">
-                    <span class="flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                        Servicios
-                    </span>
-                </a>
-                <a href="{{ route('clientes.index') }}"
-                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('clientes.*') ? 'text-primary-700 bg-primary-50 dark:text-primary-400 dark:bg-surface-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-surface-700' }} transition-colors">
-                    <span class="flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        Clientes
-                    </span>
-                </a>
                 <a href="{{ route('masajistas.index') }}"
-                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('masajistas.*') ? 'text-primary-700 bg-primary-50 dark:text-primary-400 dark:bg-surface-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-surface-700' }} transition-colors">
+                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('masajistas.*') ? 'text-primary-700 bg-primary-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition-colors">
                     <span class="flex items-center gap-1.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -80,31 +59,13 @@
                 </a>
             </nav>
 
-            <div class="flex items-center gap-2">
-                {{-- Dark Mode Toggle --}}
-                <button onclick="toggleDarkMode()"
-                    class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-700 transition-colors"
-                    id="dark-mode-toggle" aria-label="Toggle dark mode">
-                    <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-
-                {{-- Mobile Menu Toggle --}}
-                <button x-data @click="$dispatch('toggle-mobile-menu')"
-                    class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-surface-700"
-                    id="mobile-menu-btn">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
+            {{-- Mobile Menu Toggle --}}
+            <button x-data @click="$dispatch('toggle-mobile-menu')"
+                class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100" id="mobile-menu-btn">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -112,18 +73,13 @@
     <div x-data="{ open: false }" @toggle-mobile-menu.window="open = !open" x-show="open"
         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2"
         x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150"
-        class="md:hidden border-t border-gray-100 dark:border-surface-700 bg-white dark:bg-surface-900 px-4 py-3 space-y-1"
-        id="mobile-menu">
+        class="md:hidden border-t border-gray-100 bg-white px-4 py-3 space-y-1" id="mobile-menu" x-cloak>
         <a href="{{ route('dashboard') }}"
-            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-surface-700">Dashboard</a>
+            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Dashboard</a>
         <a href="{{ route('citas.index') }}"
-            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-surface-700">Citas</a>
-        <a href="{{ route('servicios.index') }}"
-            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-surface-700">Servicios</a>
-        <a href="{{ route('clientes.index') }}"
-            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-surface-700">Clientes</a>
+            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Citas</a>
         <a href="{{ route('masajistas.index') }}"
-            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-surface-700">Masajistas</a>
+            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Masajistas</a>
         <a href="{{ route('citas.create') }}" class="block btn-primary text-sm text-center mt-2">+ Nueva Cita</a>
     </div>
 </header>

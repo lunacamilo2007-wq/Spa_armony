@@ -1,249 +1,277 @@
 @extends('layouts.app')
 
-@section('titulo', 'Nueva Cita - SPA Armonía')
+@section('titulo', 'Agendar Nueva Cita')
 
 @section('contenido')
-<div class="bg-surface-50 dark:bg-surface-900 min-h-[calc(100vh-4rem)]" id="cita-create-page">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-surface-50 min-h-[calc(100vh-4rem)]" id="citas-create-page">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ esNuevoCliente: '0' }">
 
-        {{-- Header Banner --}}
-        <div class="bg-gradient-to-r from-primary-500 to-primary-700 rounded-2xl p-8 mb-8 relative overflow-hidden" id="cita-header-banner">
-            <div class="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/4"></div>
-            <h1 class="text-2xl font-bold text-white relative z-10">Nueva Cita</h1>
-            <p class="text-primary-100 mt-1 relative z-10">Agenda una nueva cita para tus clientes</p>
-        </div>
-
-        <form method="POST" action="{{ route('citas.store') }}" id="form-nueva-cita" x-data="citaForm()">
-            @csrf
-
-            {{-- Client Section --}}
-            <div class="card p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Información del Cliente</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Selecciona un cliente existente o registra uno nuevo</p>
-
-                {{-- Toggle --}}
-                <div class="flex gap-2 mb-6">
-                    <button type="button" @click="clienteNuevo = false"
-                            :class="!clienteNuevo ? 'btn-primary' : 'btn-secondary'" class="text-sm">
-                        Cliente Existente
-                    </button>
-                    <button type="button" @click="clienteNuevo = true"
-                            :class="clienteNuevo ? 'btn-primary' : 'btn-secondary'" class="text-sm">
-                        Cliente Nuevo
-                    </button>
-                </div>
-
-                <template x-if="!clienteNuevo">
-                    <div>
-                        <label for="id_cliente" class="label-field">Seleccionar Cliente *</label>
-                        <select name="id_cliente" id="id_cliente" class="select-field" required>
-                            <option value="">Selecciona un cliente</option>
-                            @foreach($clientes as $cliente)
-                                <option value="{{ $cliente->cedula }}">{{ $cliente->cedula }} - {{ $cliente->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </template>
-
-                <template x-if="clienteNuevo">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="new_cedula" class="label-field">Cédula *</label>
-                            <input type="number" id="new_cedula" name="new_cedula" class="input-field" placeholder="1001234567" required>
-                        </div>
-                        <div>
-                            <label for="new_nombre" class="label-field">Nombre Completo *</label>
-                            <input type="text" id="new_nombre" name="new_nombre" class="input-field" placeholder="María González" required>
-                        </div>
-                        <div>
-                            <label for="new_telefono" class="label-field">Teléfono</label>
-                            <input type="text" id="new_telefono" name="new_telefono" class="input-field" placeholder="3121234567">
-                        </div>
-                        <div>
-                            <label for="new_correo" class="label-field">Email</label>
-                            <input type="email" id="new_correo" name="new_correo" class="input-field" placeholder="maria@email.com">
-                        </div>
-                    </div>
-                </template>
-            </div>
-
-            {{-- Appointment Details --}}
-            <div class="card p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Detalles de la Cita</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Configura la fecha, hora y asignación</p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label for="masajista" class="label-field">
-                            <span class="flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                Masajista *
-                            </span>
-                        </label>
-                        <select name="masajista" id="masajista" class="select-field" required>
-                            <option value="">Selecciona un masajista</option>
-                            @foreach($masajistas as $m)
-                                <option value="{{ $m->cedula }}">{{ $m->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label for="habitacion" class="label-field">
-                            <span class="flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                                Habitación
-                            </span>
-                        </label>
-                        <select name="habitacion" id="habitacion" class="select-field">
-                            <option value="">Selecciona una habitación</option>
-                            @for($i = 101; $i <= 110; $i++)
-                                <option value="{{ $i }}">Habitación {{ $i }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label for="fecha_date" class="label-field">
-                            <span class="flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                Fecha *
-                            </span>
-                        </label>
-                        <input type="date" name="fecha_date" id="fecha_date" class="input-field" min="{{ date('Y-m-d') }}" required>
-                    </div>
-                    <div>
-                        <label for="hora" class="label-field">
-                            <span class="flex items-center gap-1.5">
-                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                Hora *
-                            </span>
-                        </label>
-                        <select name="hora" id="hora" class="select-field" required>
-                            <option value="">Selecciona una hora</option>
-                            @for($h = 8; $h <= 20; $h++)
-                                <option value="{{ sprintf('%02d', $h) }}:00">{{ sprintf('%02d', $h) }}:00</option>
-                                <option value="{{ sprintf('%02d', $h) }}:30">{{ sprintf('%02d', $h) }}:30</option>
-                            @endfor
-                        </select>
-                    </div>
-                </div>
-
-                {{-- Hidden combined fecha field --}}
-                <input type="hidden" name="fecha" :value="combineFecha()" id="fecha-hidden">
-
-                <div class="mb-4">
-                    <label for="estado" class="label-field">Estado de la Cita</label>
-                    <select name="estado" id="estado" class="select-field">
-                        <option value="pendiente" selected>Pendiente</option>
-                        <option value="confirmada">Confirmada</option>
-                    </select>
-                </div>
-
+            {{-- Header --}}
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
-                    <label for="nota" class="label-field">Notas (opcional)</label>
-                    <textarea name="nota" id="nota" rows="3" class="input-field" placeholder="Preferencias, alergias, comentarios especiales..."></textarea>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
+                        Agendar Cita
+                    </h1>
+                    <p class="text-sm text-gray-500 font-medium mt-1">
+                        Configura una nueva cita para un cliente.
+                    </p>
                 </div>
+                <a href="{{ route('citas.index') }}" class="btn-secondary gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="h-4 w-4">
+                        <path d="m12 19-7-7 7-7" />
+                        <path d="M19 12H5" />
+                    </svg>
+                    Volver
+                </a>
             </div>
 
-            {{-- Services Section --}}
-            <div class="card p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Servicios</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Agrega los servicios que incluirá esta cita</p>
+            {{-- Form Section --}}
+            <div class="card overflow-hidden">
+                <form action="{{ route('citas.store') }}" method="POST">
+                    @csrf
 
-                {{-- Add Service --}}
-                <div class="mb-4">
-                    <label class="label-field">Agregar Servicio</label>
-                    <select @change="addServicio($event.target.value); $event.target.value = ''" class="select-field" id="add-servicio-select">
-                        <option value="">Selecciona un servicio para agregar</option>
-                        @foreach($servicios as $srv)
-                            <option value="{{ $srv->id_servicio }}" data-nombre="{{ $srv->nombre_servicio }}" data-precio="{{ $srv->precio }}">
-                                {{ $srv->nombre_servicio }} - ${{ number_format($srv->precio, 0, ',', '.') }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div class="p-6 sm:p-8 space-y-10">
 
-                {{-- Selected Services --}}
-                <template x-if="selectedServicios.length > 0">
-                    <div class="space-y-3">
-                        <template x-for="(srv, index) in selectedServicios" :key="index">
-                            <div class="flex items-center gap-4 p-4 bg-surface-50 dark:bg-surface-700/50 rounded-lg">
-                                <input type="hidden" :name="'servicios['+index+'][id_servicio]'" :value="srv.id">
-                                <div class="flex-1">
-                                    <span class="font-medium text-gray-900 dark:text-white" x-text="srv.nombre"></span>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400 ml-2" x-text="'$' + srv.precio.toLocaleString()"></span>
+                        {{-- Sección del Cliente --}}
+                        <div class="space-y-6">
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4">Información
+                                    del Cliente</h2>
+
+                                {{-- Toggle Cliente Nuevo o Existente --}}
+                                <div class="flex gap-4 mb-6">
+                                    <label
+                                        class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none transition-all"
+                                        :class="{ 'border-primary-500 ring-1 ring-primary-500': esNuevoCliente === '0', 'border-gray-200': esNuevoCliente !== '0' }">
+                                        <input type="radio" x-model="esNuevoCliente" name="es_nuevo_cliente" value="0"
+                                            class="sr-only">
+                                        <span class="flex flex-1">
+                                            <span class="flex flex-col">
+                                                <span class="block text-sm font-medium text-gray-900">Cliente
+                                                    Existente</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">Buscar en
+                                                    sistema</span>
+                                            </span>
+                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="h-5 w-5 text-primary-600"
+                                            x-show="esNuevoCliente === '0'">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                            <path d="m9 11 3 3L22 4" />
+                                        </svg>
+                                    </label>
+
+                                    <label
+                                        class="relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none transition-all"
+                                        :class="{ 'border-primary-500 ring-1 ring-primary-500': esNuevoCliente === '1', 'border-gray-200': esNuevoCliente !== '1' }">
+                                        <input type="radio" x-model="esNuevoCliente" name="es_nuevo_cliente" value="1"
+                                            class="sr-only">
+                                        <span class="flex flex-1">
+                                            <span class="flex flex-col">
+                                                <span class="block text-sm font-medium text-gray-900">Cliente Nuevo</span>
+                                                <span class="mt-1 flex items-center text-sm text-gray-500">Registrar
+                                                    ahora</span>
+                                            </span>
+                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="h-5 w-5 text-primary-600"
+                                            x-show="esNuevoCliente === '1'" style="display: none;">
+                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                            <path d="m9 11 3 3L22 4" />
+                                        </svg>
+                                    </label>
                                 </div>
-                                <div class="w-32">
-                                    <input type="number" :name="'servicios['+index+'][duracion]'" x-model="srv.duracion" class="input-field text-sm" placeholder="min" min="1">
+
+                                {{-- Select Cliente Existente --}}
+                                <div x-show="esNuevoCliente === '0'" x-transition class="space-y-4">
+                                    <div>
+                                        <label for="id_cliente" class="label-field">
+                                            Seleccionar Cliente <span class="text-red-500">*</span>
+                                        </label>
+                                        <select id="id_cliente" name="id_cliente" class="select-field">
+                                            <option value="">Seleccione un cliente...</option>
+                                            @foreach($clientes as $cliente)
+                                                <option value="{{ $cliente->cedula }}" {{ old('id_cliente') == $cliente->cedula ? 'selected' : '' }}>
+                                                    {{ $cliente->nombre }} (CC: {{ $cliente->cedula }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <button type="button" @click="removeServicio(index)" class="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
+
+                                {{-- Formulario Cliente Nuevo --}}
+                                <div x-show="esNuevoCliente === '1'" x-transition x-cloak
+                                    class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 p-5 bg-gray-50 border border-gray-200 rounded-xl">
+                                    <div>
+                                        <label for="nuevo_cliente_cedula" class="label-field">Cédula <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="number" name="nuevo_cliente_cedula" id="nuevo_cliente_cedula"
+                                            value="{{ old('nuevo_cliente_cedula') }}" class="input-field">
+                                    </div>
+
+                                    <div>
+                                        <label for="nuevo_cliente_nombre" class="label-field">Nombre Completo <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" name="nuevo_cliente_nombre" id="nuevo_cliente_nombre"
+                                            value="{{ old('nuevo_cliente_nombre') }}" class="input-field">
+                                    </div>
+
+                                    <div>
+                                        <label for="nuevo_cliente_telefono" class="label-field">Teléfono <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" name="nuevo_cliente_telefono" id="nuevo_cliente_telefono"
+                                            value="{{ old('nuevo_cliente_telefono') }}" class="input-field">
+                                    </div>
+
+                                    <div>
+                                        <label for="nuevo_cliente_correo" class="label-field">Correo Electrónico <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="email" name="nuevo_cliente_correo" id="nuevo_cliente_correo"
+                                            value="{{ old('nuevo_cliente_correo') }}" class="input-field">
+                                    </div>
+                                </div>
                             </div>
-                        </template>
-
-                        {{-- Total --}}
-                        <div class="flex items-center justify-between p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
-                            <span class="font-semibold text-primary-700 dark:text-primary-300">Total</span>
-                            <span class="text-xl font-bold text-primary-700 dark:text-primary-300" x-text="'$' + totalServicios.toLocaleString()"></span>
                         </div>
-                    </div>
-                </template>
 
-                <template x-if="selectedServicios.length === 0">
-                    <p class="text-gray-400 dark:text-gray-500 text-center py-4">No se han agregado servicios aún.</p>
-                </template>
-            </div>
+                        {{-- Sección de la Cita --}}
+                        <div class="space-y-6">
+                            <h2 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-2 mb-4">Detalles de la
+                                Cita</h2>
 
-            {{-- Submit --}}
-            <div class="flex gap-4">
-                <button type="submit" class="btn-primary flex-1 text-base py-3" id="btn-submit-cita">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    Crear Cita
-                </button>
-                <a href="{{ route('citas.index') }}" class="btn-secondary text-base py-3">Cancelar</a>
-            </div>
-        </form>
+                            <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+
+                                {{-- Fecha y Hora --}}
+                                <div class="mb-4" x-data="{ fechaHora: '' }" x-init="
+    flatpickr($refs.miCalendario, {
+        enableTime: true,          // Habilita la selección de hora
+        dateFormat: 'Y-m-d H:i',   // Formato que entiende Laravel por defecto
+        locale: 'es',              // Lo pasa a español
+        time_24hr: false,          // Usa AM/PM (o true si prefieres formato 24h)
+        minDate: 'today',          // No permite agendar citas en el pasado
+        minTime: '08:00',          // Opcional: Hora de apertura
+        maxTime: '20:00',          // Opcional: Hora de cierre
+        minuteIncrement: 15,       // Los minutos saltan de 15 en 15 (ideal para citas)
+    })
+">
+    <label for="fecha" class="block text-sm font-medium text-gray-700 mb-1">
+        Fecha y Hora de la Cita
+    </label>
+    
+    <div class="relative">
+        <input 
+            x-ref="miCalendario"
+            type="text" 
+            x-model="fechaHora"
+            name="fecha" 
+            id="fecha"
+            class="w-full pl-10 pr-4 py-2 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 text-gray-900 shadow-sm transition-colors cursor-pointer"
+            placeholder="Selecciona el día y la hora..."
+            readonly
+        >
+        
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+        </div>
     </div>
 </div>
 
-@push('scripts')
-<script>
-function citaForm() {
-    return {
-        clienteNuevo: false,
-        selectedServicios: [],
+                                {{-- Habitación --}}
+                                <div>
+                                    <label for="habitacion" class="label-field">Habitación N° <span
+                                            class="text-red-500">*</span></label>
+                                    {{-- <input type="number" name="habitacion" id="habitacion" value="{{ old('habitacion') }}"
+                                        min="1" class="input-field"> --}}
+                                    <select name="habitacion" id="habitacion" class="input-field">
+                                        <option value="">Seleccione una habitación...</option>
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <option value="{{ $i }}" {{ old('habitacion') == $i ? 'selected' : '' }}>
+                                                {{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
 
-        get totalServicios() {
-            return this.selectedServicios.reduce((sum, s) => sum + s.precio, 0);
-        },
+                                {{-- Masajista --}}
+                                <div class="sm:col-span-2">
+                                    <label for="masajista" class="label-field">Masajista Asignado <span
+                                            class="text-red-500">*</span></label>
+                                    <select id="masajista" name="masajista" class="select-field">
+                                        <option value="">Seleccione un masajista...</option>
+                                        @foreach($masajistas as $mas)
+                                            <option value="{{ $mas->cedula }}" {{ old('masajista') == $mas->cedula ? 'selected' : '' }}>
+                                                {{ $mas->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-        combineFecha() {
-            const date = document.getElementById('fecha_date')?.value || '';
-            const hora = document.getElementById('hora')?.value || '00:00';
-            return date ? `${date}T${hora}:00` : '';
-        },
+                                {{-- Servicios (Checkbox Group) --}}
+                                <div class="sm:col-span-2 mt-4 space-y-3">
+                                    <fieldset>
+                                        <legend class="text-sm font-medium leading-6 text-gray-900">Servicios a realizar
+                                            <span class="text-red-500">*</span></legend>
+                                        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            @foreach($servicios as $servicio)
+                                                <div
+                                                    class="relative flex items-start p-4 border border-gray-200 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+                                                    <div class="flex h-6 items-center">
+                                                        <input id="servicio_{{ $servicio->id_servicio }}" name="servicios[]"
+                                                            value="{{ $servicio->id_servicio }}" type="checkbox"
+                                                            class="h-5 w-5 rounded border-gray-300 text-primary-600 focus:ring-primary-600"
+                                                            {{ is_array(old('servicios')) && in_array($servicio->id_servicio, old('servicios')) ? 'checked' : '' }}>
+                                                    </div>
+                                                    <div class="ml-3 text-sm leading-6 flex-1">
+                                                        <label for="servicio_{{ $servicio->id_servicio }}"
+                                                            class="font-medium text-gray-900 select-none cursor-pointer">
+                                                            {{ $servicio->nombre_servicio }}
+                                                        </label>
+                                                        <p class="text-gray-500">${{ number_format($servicio->precio, 0) }}</p>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </fieldset>
+                                </div>
 
-        addServicio(id) {
-            if (!id) return;
-            if (this.selectedServicios.find(s => s.id == id)) return;
+                                {{-- Nota --}}
+                                <div class="sm:col-span-2">
+                                    <label for="nota" class="label-field">Notas Opcionales</label>
+                                    <textarea id="nota" name="nota" rows="3"
+                                        class="input-field">{{ old('nota') }}</textarea>
+                                    <p class="mt-1 text-sm text-gray-500">Ejemplo: Condiciones médicas, preferencias
+                                        especiales del cliente, etc.</p>
+                                </div>
+                            </div>
+                        </div>
 
-            const option = document.querySelector(`#add-servicio-select option[value="${id}"]`);
-            this.selectedServicios.push({
-                id: parseInt(id),
-                nombre: option.dataset.nombre,
-                precio: parseInt(option.dataset.precio),
-                duracion: 60
-            });
-        },
+                    </div>
 
-        removeServicio(index) {
-            this.selectedServicios.splice(index, 1);
-        }
-    };
-}
-</script>
-@endpush
+                    {{-- Footer con Botones --}}
+                    <div class="bg-gray-50 px-6 py-5 sm:flex sm:flex-row-reverse sm:px-8 border-t border-gray-200">
+                        <button type="submit" class="btn-primary w-full sm:w-auto sm:ml-3 gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="h-4 w-4">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                <polyline points="17 21 17 13 7 13 7 21" />
+                                <polyline points="7 3 7 8 15 8" />
+                            </svg>
+                            Guardar Cita
+                        </button>
+                        <a href="{{ route('citas.index') }}" class="btn-secondary w-full sm:w-auto mt-3 sm:mt-0">
+                            Cancelar
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
 @endsection

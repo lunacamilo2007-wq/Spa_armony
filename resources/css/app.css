@@ -53,15 +53,11 @@
 /* ─── Component Styles ────────────────────────────────────────────────── */
 @layer components {
     .btn-primary {
-        @apply inline-flex items-center justify-center px-5 py-2.5 bg-primary-600 text-white font-semibold rounded-lg
-               hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
-               transition-all duration-200 ease-in-out shadow-sm hover:shadow-md;
+        @apply inline-flex items-center justify-center px-5 py-2.5 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 ease-in-out shadow-sm hover:shadow-md;
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center px-5 py-2.5 bg-white text-gray-700 font-semibold rounded-lg
-               border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
-               transition-all duration-200 ease-in-out;
+        @apply inline-flex items-center justify-center px-5 py-2.5 bg-white text-gray-700 font-semibold rounded-lg border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 ease-in-out;
     }
 
     .dark .btn-secondary {
@@ -69,9 +65,7 @@
     }
 
     .btn-danger {
-        @apply inline-flex items-center justify-center px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg
-               hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-               transition-all duration-200 ease-in-out;
+        @apply inline-flex items-center justify-center px-5 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 ease-in-out;
     }
 
     .card {
@@ -91,9 +85,7 @@
     }
 
     .input-field {
-        @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900
-               placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
-               focus:outline-none transition-all duration-200;
+        @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-200;
     }
 
     .dark .input-field {
@@ -101,15 +93,13 @@
     }
 
     .select-field {
-        @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900
-               placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20
-               focus:outline-none transition-all duration-200 appearance-none cursor-pointer;
+        @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all duration-200 appearance-none cursor-pointer;
     }
 
     .dark .select-field {
         @apply bg-surface-800 border-surface-700 text-gray-100 placeholder-gray-500;
     }
-    
+
     .dark .select-field option {
         @apply bg-surface-800 text-gray-100;
     }
@@ -156,23 +146,6 @@
 
     .dark .badge-finalizada {
         @apply bg-blue-900/30 text-blue-400;
-    }
-
-    .sidebar-link {
-        @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-600 font-medium
-               hover:bg-primary-50 hover:text-primary-700 transition-all duration-200;
-    }
-
-    .sidebar-link.active {
-        @apply bg-primary-50 text-primary-700 font-semibold;
-    }
-
-    .dark .sidebar-link {
-        @apply text-gray-400 hover:bg-surface-700 hover:text-primary-400;
-    }
-
-    .dark .sidebar-link.active {
-        @apply bg-surface-700 text-primary-400;
     }
 
     .stat-card {
@@ -244,16 +217,40 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── Alpine cloak ────────────────────────────────────────────────────── */
+[x-cloak] {
+    display: none !important;
 }

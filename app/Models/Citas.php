@@ -37,7 +37,7 @@ class Citas extends Model
         return $this->belongsTo(Clientes::class, 'id_cliente', 'cedula');
     }
 
-    public function masajista(): BelongsTo
+    public function masajistaRel(): BelongsTo
     {
         return $this->belongsTo(Masajista::class, 'masajista', 'cedula');
     }

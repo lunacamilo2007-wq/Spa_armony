@@ -22,7 +22,7 @@ class CitasController extends Controller
      */
     public function index()
     {
-        $citas = Citas::with(['cliente', 'masajista', 'servicios'])->get();
+        $citas = Citas::with(['cliente', 'masajistaRel', 'servicios'])->get();
         return view('citas.index', compact('citas'));
     }
 
@@ -52,7 +52,7 @@ class CitasController extends Controller
      */
     public function show(string $id)
     {
-        $cita = Citas::with(['cliente', 'masajista', 'servicios'])->findOrFail($id);
+        $cita = Citas::with(['cliente', 'masajistaRel', 'servicios'])->findOrFail($id);
         return view('citas.show', compact('cita'));
     }
 

@@ -18,23 +18,28 @@ class AdminController extends Controller
     public function dashboard(): View
     {
         $totalCitas = Citas::count();
+        $citasPendientes = Citas::where('estado', 'pendiente')->count();
+        // $citasConfirmadas = Cita::where('estado', 'confirmada')->count();
         $citasHoy = Citas::whereDate('fecha', today())->count();
         $totalClientes = Clientes::count();
         $totalMasajistas = Masajista::count();
         $totalServicios = Servicios::count();
 
-        $citasRecientes = Citas::with('cliente', 'masajista', 'servicios')
-            ->orderBy('fecha', 'desc')
+        $citasparahoy = Citas::with(['cliente', 'masajistaRel', 'servicios'])
+            ->whereBetween('fecha', [now(), now()->endOfDay()])
+            ->orderBy('fecha', 'asc')
             ->limit(5)
             ->get();
 
         return view('dashboard', compact(
             'totalCitas',
+            'citasPendientes',
+            // 'citasConfirmadas',
             'citasHoy',
             'totalClientes',
             'totalMasajistas',
             'totalServicios',
-            'citasRecientes',
+            'citasparahoy',
         ));
     }
 
