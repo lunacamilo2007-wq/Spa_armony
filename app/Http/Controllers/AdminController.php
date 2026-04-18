@@ -17,10 +17,12 @@ class AdminController extends Controller
      */
     public function dashboard(): View
     {
-        $totalCitas = Citas::count();
-        $citasPendientes = Citas::where('estado', 'pendiente')->count();
-        // $citasConfirmadas = Cita::where('estado', 'confirmada')->count();
         $citasHoy = Citas::whereDate('fecha', today())->count();
+        $citasHoyFinalizadas = Citas::whereDate('fecha', today())->where('estado', 'finalizada')->count();
+        $citasPendientes = Citas::where('estado', 'pendiente')->count();
+        $citasConfirmadas = Citas::where('estado', 'confirmada')->count();
+        $totalCitas = Citas::count();
+        $totalCitasFinalizadas = Citas::where('estado', 'finalizada')->count();
         $totalClientes = Clientes::count();
         $totalMasajistas = Masajista::count();
         $totalServicios = Servicios::count();
@@ -34,8 +36,10 @@ class AdminController extends Controller
         return view('dashboard', compact(
             'totalCitas',
             'citasPendientes',
-            // 'citasConfirmadas',
+            'citasConfirmadas',
             'citasHoy',
+            'citasHoyFinalizadas',
+            'totalCitasFinalizadas',
             'totalClientes',
             'totalMasajistas',
             'totalServicios',
