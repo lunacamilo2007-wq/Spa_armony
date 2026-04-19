@@ -4,7 +4,33 @@
 
 @section('contenido')
     <div class="bg-surface-50 min-h-[calc(100vh-4rem)]" id="citas-create-page">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ esNuevoCliente: '0' }">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" 
+            x-data="{ 
+                esNuevoCliente: '{{ old('es_nuevo_cliente', '0') }}',
+                searchCliente: '',
+                selectedCliente: null,
+                showDropdown: false,
+                clientes: {{ json_encode($clientes) }},
+                get filteredClientes() {
+                    if (this.searchCliente === '') return [];
+                    return this.clientes.filter(c => 
+                        c.nombre.toLowerCase().includes(this.searchCliente.toLowerCase()) || 
+                        c.cedula.toString().includes(this.searchCliente)
+                    );
+                },
+                selectCliente(cliente) {
+                    this.selectedCliente = cliente;
+                    this.searchCliente = `${cliente.nombre} (CC: ${cliente.cedula})`;
+                    this.showDropdown = false;
+                },
+                init() {
+                    const oldId = '{{ old('id_cliente') }}';
+                    if (oldId) {
+                        const client = this.clientes.find(c => c.cedula == oldId);
+                        if (client) this.selectCliente(client);
+                    }
+                }
+            }">
 
             {{-- Header --}}
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -86,22 +112,75 @@
                                     </label>
                                 </div>
 
-                                {{-- Select Cliente Existente --}}
-                                <div x-show="esNuevoCliente === '0'" x-transition class="space-y-4">
-                                    <div>
-                                        <label for="id_cliente" class="label-field">
+                                {{-- Select Cliente Existente (Searchable) --}}
+                                <div x-show="esNuevoCliente === '0'" x-transition class="space-y-4 relative z-50" >
+                                    <div class="relative">
+                                        <label for="search_cliente" class="label-field">
                                             Seleccionar Cliente <span class="text-red-500">*</span>
                                         </label>
-                                        <select id="id_cliente" name="id_cliente" class="select-field">
-                                            <option value="">Seleccione un cliente...</option>
-                                            @foreach($clientes as $cliente)
-                                                <option value="{{ $cliente->cedula }}" {{ old('id_cliente') == $cliente->cedula ? 'selected' : '' }}>
-                                                    {{ $cliente->nombre }} (CC: {{ $cliente->cedula }})
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        
+                                        <div class="relative group">
+                                            <input type="text" 
+                                                x-model="searchCliente" 
+                                                @input="showDropdown = true; selectedCliente = null"
+                                                @focus="showDropdown = true"
+                                                @click.away="showDropdown = false"
+                                                class="input-field pr-10" 
+                                                placeholder="Busque por nombre o número de cédula..."
+                                                autocomplete="off"
+                                                id="search_cliente">
+                                            
+                                            {{-- Icono de búsqueda --}}
+                                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                                <svg class="h-5 w-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                            </div>
+
+                                            {{-- Dropdown de resultados --}}
+                                            <div x-show="showDropdown && searchCliente.length > 0" 
+                                                x-cloak
+                                                class="absolute z-20 mt-2 w-full bg-white shadow-xl max-h-72 rounded-xl py-2 border border-gray-100 overflow-auto focus:outline-none sm:text-sm animate-fade-in"
+                                                x-transition:enter="transition ease-out duration-200"
+                                                x-transition:enter-start="opacity-0 translate-y-1"
+                                                x-transition:enter-end="opacity-100 translate-y-0">
+                                                
+                                                <template x-for="cliente in filteredClientes" :key="cliente.cedula">
+                                                    <div @click="selectCliente(cliente)" 
+                                                        class="cursor-pointer select-none relative py-3 px-4 hover:bg-primary-50 transition-colors border-b border-gray-50 last:border-0 group/item">
+                                                        <div class="flex flex-col">
+                                                            <span class="block truncate font-semibold text-gray-900 group-hover/item:text-primary-700" x-text="cliente.nombre"></span>
+                                                            <span class="block truncate text-xs text-gray-500" x-text="'Cédula: ' + cliente.cedula"></span>
+                                                        </div>
+                                                        <span x-show="selectedCliente && selectedCliente.cedula === cliente.cedula" 
+                                                            class="absolute inset-y-0 right-0 flex items-center pr-4 text-primary-600">
+                                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </template>
+
+                                                <div x-show="filteredClientes.length === 0" class="py-4 px-4 text-center">
+                                                    <svg class="mx-auto h-8 w-8 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    <p class="text-sm text-red-500 font-medium">
+                                                        El usuario no está registrado en el sistema.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {{-- Input oculto para el formulario --}}
+                                        <input type="hidden" name="id_cliente" :value="selectedCliente ? selectedCliente.cedula : ''">
+                                        
+                                        @error('id_cliente')
+                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
+
 
                                 {{-- Formulario Cliente Nuevo --}}
                                 <div x-show="esNuevoCliente === '1'" x-transition x-cloak
