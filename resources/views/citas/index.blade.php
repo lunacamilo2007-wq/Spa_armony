@@ -127,18 +127,17 @@
                     <p class="text-primary-600 text-sm mt-0.5 capitalize" x-show="view === 'list'"
                         x-text="selectedDateFormatted" style="display: none;"></p>
 
-                    {{--<div x-show="view === 'list'">
-                        <label for="masajista" class="label-field">Filtrar citas por masajista: <span
-                                class="text-red-500">*</span></label>
-                        <select id="masajista" name="masajista" class="select-field">
-                            <option value="">Seleccione un masajista...</option>
-                            @foreach($masajistas as $mas)
-                            <option value="{{ $mas->cedula }}" {{ old('masajista')==$mas->cedula ? 'selected' : '' }}>
-                                {{ $mas->nombre }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>--}}
+                    <div x-show="view === 'list' && masajistasDelDia.length > 0" class="mt-3 animate-fade-in" style="display: none;">
+                        <div class="inline-flex flex-col">
+                            <label for="filtro_masajista" class="label-field text-xs text-gray-500 mb-1">Filtrar por masajista:</label>
+                            <select id="filtro_masajista" x-model="selectedMasajista" @change="filterCitas()" class="select-field py-1.5 px-3 text-sm min-w-[200px]">
+                                <option value="">Todos los masajistas</option>
+                                <template x-for="mas in masajistasDelDia" :key="mas.id">
+                                    <option :value="mas.id" x-text="mas.nombre"></option>
+                                </template>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="flex items-center gap-3 mt-4 sm:mt-0">
                     <button x-show="view === 'list'" @click="backToCalendar"
@@ -169,7 +168,11 @@
             <div x-show="view === 'list'" style="display: none;" class="animate-fade-in">
                 <div class="space-y-4" id="citas-list-container">
                     @forelse($citas as $cita)
-                        <div class="card p-6 cita-card" data-date="{{ $cita->fecha->format('Y-m-d') }}" x-data="{ open: false }"
+                        <div class="card p-6 cita-card" 
+                            data-date="{{ $cita->fecha->format('Y-m-d') }}" 
+                            data-masajista-id="{{ $cita->masajista }}" 
+                            data-masajista-nombre="{{ $cita->masajistaRel->nombre ?? 'Desconocido' }}"
+                            x-data="{ open: false }"
                             :class="{ 'relative z-50': open }" style="display: none;">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-4">
                                 {{-- Avatar + Client Info --}}
@@ -343,6 +346,8 @@
                     view: 'calendar',
                     selectedDate: null,
                     selectedDateFormatted: '',
+                    selectedMasajista: '',
+                    masajistasDelDia: [],
                     calendar: null,
 
                     init() {
@@ -407,18 +412,28 @@
                         });
 
                         this.view = 'list';
+                        this.selectedMasajista = '';
 
                         let cards = document.querySelectorAll('.cita-card');
                         let count = 0;
+                        let masajistasMap = new Map();
 
                         cards.forEach(card => {
                             if (card.dataset.date === this.selectedDate) {
                                 card.style.display = 'block';
                                 count++;
+                                
+                                let mId = card.dataset.masajistaId;
+                                let mNombre = card.dataset.masajistaNombre;
+                                if (mId && mNombre) {
+                                    masajistasMap.set(mId, mNombre);
+                                }
                             } else {
                                 card.style.display = 'none';
                             }
                         });
+
+                        this.masajistasDelDia = Array.from(masajistasMap, ([id, nombre]) => ({id, nombre}));
 
                         let emptyState = document.getElementById('empty-day-state');
                         if (emptyState) {
@@ -431,9 +446,32 @@
                         }
                     },
 
+                    filterCitas() {
+                        let cards = document.querySelectorAll('.cita-card');
+                        let count = 0;
+                        cards.forEach(card => {
+                            if (card.dataset.date === this.selectedDate) {
+                                if (this.selectedMasajista === '' || card.dataset.masajistaId === this.selectedMasajista) {
+                                    card.style.display = 'block';
+                                    count++;
+                                } else {
+                                    card.style.display = 'none';
+                                }
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                        let emptyState = document.getElementById('empty-day-state');
+                        if (emptyState) {
+                            emptyState.style.display = count === 0 ? 'block' : 'none';
+                        }
+                    },
+
                     backToCalendar() {
                         this.view = 'calendar';
                         this.selectedDate = null;
+                        this.selectedMasajista = '';
+                        this.masajistasDelDia = [];
                         this.$nextTick(() => {
                             if (this.calendar) {
                                 this.calendar.updateSize();
