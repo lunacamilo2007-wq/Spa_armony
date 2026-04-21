@@ -13,7 +13,7 @@
             </div>
 
             {{-- Stats Grid --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">                {{-- Citas de Hoy --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"> {{-- Citas de Hoy --}}
                 <div class="stat-card">
                     <div class="flex items-start justify-between">
                         <span class="text-sm font-semibold text-gray-500">Citas de Hoy</span>
@@ -175,7 +175,7 @@
                 <div class="lg:col-span-2 card p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Citas para hoy</h2>
-                        <a href="{{ route('citas.index') }}"
+                        <a href="{{ route('citas.index', ['date' => now()->timezone('America/Bogota')->format('Y-m-d')]) }}"
                             class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium">Ver
                             las citas de hoy &rarr;</a>
                     </div>

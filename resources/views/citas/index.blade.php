@@ -351,8 +351,14 @@
                     calendar: null,
 
                     init() {
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const dateParam = urlParams.get('date');
+
                         this.$nextTick(() => {
                             this.initCalendar();
+                            if (dateParam) {
+                                this.showDate(dateParam);
+                            }
                         });
                     },
 
