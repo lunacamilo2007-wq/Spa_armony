@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Servicios extends Model
 {
+    use HasFactory;
     protected $table = "servicios";
     protected $primaryKey = "id_servicio";
     protected $keyType = "int";
