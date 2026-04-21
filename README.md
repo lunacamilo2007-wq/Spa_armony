@@ -7,6 +7,19 @@ Un sistema de gestión integral, moderno y responsivo para el SPA Armonía. Cons
 *   **Backend:** Laravel 12.x / PHP 8.2+
 *   **Frontend:** Alpine.js, Tailwind CSS v4, Blade Templates, Vite
 *   **Base de Datos:** SQLite (Tests y local por defecto para agilidad) / MySQL (Producción)
+*   **Autenticación y Seguridad (NUEVO):** Guard personalizado de Laravel, encriptación de contraseñas con Hash y protección activa de sesión mediante JS (Beacon API).
+
+---
+
+## 🌟 Características y Módulos del Sistema
+
+*   **🔐 Seguridad y Acceso (NUEVO):** El sistema administrativo está totalmente protegido. Todas las rutas requieren inicio de sesión previo.
+    *   **Credenciales por defecto:** Usuario: `admin1` | Contraseña: `admin123`
+    *   **Auto-cierre de sesión:** Al intentar cerrar la pestaña o el navegador, el sistema lanza una advertencia. Si el usuario confirma la salida, la sesión se invalida y cierra automáticamente en el servidor para evitar accesos no autorizados posteriores.
+*   **📊 Dashboard Administrativo:** Panel principal con métricas en tiempo real (estado de citas de hoy, pendientes, totales de clientes/masajistas) y un resumen rápido de la agenda del día.
+*   **📅 Gestión de Citas:** Control integral de la agenda. Permite crear citas, seleccionar el masajista, servicio y cliente, y manejar el ciclo de vida de la cita (Pendiente -> Confirmada -> Finalizada o Cancelada).
+*   **👥 Directorio de Clientes y Personal:** Módulos CRUD dedicados para gestionar los perfiles de los clientes que asisten al SPA y la plantilla de masajistas.
+*   **💆 Catálogo de Servicios:** Administración de los tipos de tratamientos y masajes ofrecidos.
 
 ---
 
@@ -56,6 +69,9 @@ Por ahora está pre-configurado para que tu base de datos y tus "sesiones" funci
 
 ```bash
 php artisan migrate:fresh
+
+# Sembrar la base de datos con el usuario administrador por defecto
+php artisan db:seed --class=AdminSeeder
 ```
 
 
