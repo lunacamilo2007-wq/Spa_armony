@@ -8,10 +8,64 @@ use App\Models\Clientes;
 use App\Models\Masajista;
 use App\Models\Servicios;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class AdminController extends Controller
 {
+    /**
+     * Show the login form.
+     */
+    public function login(): View
+    {
+        return view('login');
+    }
+
+    /**
+     * Handle the login request.
+     */
+    public function loginSubmit(Request $request)
+    {
+        $request->validate([
+            'usuario' => 'required|string',
+            'contrasena' => 'required|string',
+        ], [
+            'usuario.required' => 'El campo usuario es obligatorio.',
+            'contrasena.required' => 'La contraseña es obligatoria.',
+        ]);
+
+        // Find admin by username
+        $admin = Admin::where('usuario', $request->usuario)->first();
+
+        if ($admin && Hash::check($request->contrasena, $admin->contrasena)) {
+            // Login the admin using the 'admin' guard
+            Auth::guard('admin')->login($admin);
+
+            // Regenerate session to prevent session fixation
+            $request->session()->regenerate();
+
+            return redirect()->intended(route('dashboard'));
+        }
+
+        return back()->withErrors([
+            'usuario' => 'Las credenciales proporcionadas no son correctas.',
+        ])->withInput($request->only('usuario'));
+    }
+
+    /**
+     * Logout the admin.
+     */
+    public function logout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -45,58 +99,5 @@ class AdminController extends Controller
             'totalServicios',
             'citasparahoy',
         ));
-    }
-
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Admin $admin)
-    {
-        //
     }
 }

@@ -57,6 +57,19 @@
                     </svg>
                     Nueva Cita
                 </a>
+
+                {{-- Logout Button --}}
+                <form method="POST" action="{{ route('logout') }}" class="ml-2" id="logout-form-desktop">
+                    @csrf
+                    <button type="submit"
+                        class="p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        title="Cerrar sesión" id="btn-logout-desktop">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </button>
+                </form>
             </nav>
 
             {{-- Mobile Menu Toggle --}}
@@ -81,5 +94,17 @@
         <a href="{{ route('masajistas.index') }}"
             class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Masajistas</a>
         <a href="{{ route('citas.create') }}" class="block btn-primary text-sm text-center mt-2">+ Nueva Cita</a>
+        <form method="POST" action="{{ route('logout') }}" class="mt-2" id="logout-form-mobile">
+            @csrf
+            <button type="submit"
+                class="w-full px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+                id="btn-logout-mobile">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Cerrar Sesión
+            </button>
+        </form>
     </div>
 </header>

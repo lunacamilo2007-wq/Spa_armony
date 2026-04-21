@@ -14,11 +14,13 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('admin')->insertOrIgnore([
-            'usuario' => 'admin1',
-            'contrasena' => Hash::make('contraseña123'),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        DB::table('admin')->updateOrInsert(
+            ['usuario' => 'admin1'],
+            [
+                'contrasena' => Hash::make('admin123'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+        );
     }
 }

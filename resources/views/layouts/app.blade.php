@@ -75,6 +75,48 @@
     @endif
 
     @stack('scripts')
+
+    {{-- Session protection: warn & auto-logout when closing tab/browser --}}
+    @auth('admin')
+    <script>
+        (function() {
+            // Flag to track intentional navigation (clicking links/submitting forms)
+            let isIntentionalNavigation = false;
+
+            // Mark all link clicks and form submissions as intentional
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a[href]');
+                if (link && !link.getAttribute('href').startsWith('#') && !link.getAttribute('href').startsWith('javascript:')) {
+                    isIntentionalNavigation = true;
+                }
+            });
+
+            document.addEventListener('submit', function(e) {
+                isIntentionalNavigation = true;
+            });
+
+            // Show confirmation dialog when trying to close the tab/browser
+            window.addEventListener('beforeunload', function(e) {
+                if (!isIntentionalNavigation) {
+                    e.preventDefault();
+                    // Modern browsers display a generic message, but we set returnValue for compatibility
+                    e.returnValue = '⚠️ Si cierras esta pestaña, tu sesión se cerrará y tendrás que iniciar sesión nuevamente.';
+                    return e.returnValue;
+                }
+            });
+
+            // When the page actually unloads (tab/browser closed), send logout request
+            window.addEventListener('unload', function() {
+                if (!isIntentionalNavigation) {
+                    // Use sendBeacon for reliable delivery during page unload
+                    const formData = new FormData();
+                    formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                    navigator.sendBeacon('{{ route("logout") }}', formData);
+                }
+            });
+        })();
+    </script>
+    @endauth
 </body>
 
 </html>

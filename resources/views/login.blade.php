@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Iniciar Sesión - SPA Armonía')
+@section('titulo', 'Iniciar Sesión - SPA Armonía')
 @section('no-navbar', true)
 @section('no-footer', true)
 
-@section('content')
+@section('contenido')
     <div class="min-h-[80vh] flex items-center justify-center px-4 py-12 bg-surface-50 dark:bg-surface-900" id="login-page">
         <div class="w-full max-w-md">
             {{-- Logo --}}
@@ -41,7 +41,8 @@
                         <label for="contrasena" class="label-field">Contraseña</label>
                         <div class="relative" x-data="{ showPassword: false }">
                             <input :type="showPassword ? 'text' : 'password'" name="contrasena" id="contrasena" required
-                                class="input-field pr-10" placeholder="Ingresa tu contraseña">
+                                class="input-field pr-10 @error('contrasena') border-red-500 focus:border-red-500 focus:ring-red-500/20 @enderror"
+                                placeholder="Ingresa tu contraseña">
                             <button type="button" @click="showPassword = !showPassword"
                                 class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                                 <svg x-show="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor"
@@ -58,6 +59,9 @@
                                 </svg>
                             </button>
                         </div>
+                        @error('contrasena')
+                            <p class="mt-1.5 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button type="submit" class="btn-primary w-full text-base py-3" id="btn-login">
@@ -65,11 +69,6 @@
                     </button>
                 </form>
             </div>
-
-            <p class="text-center mt-6 text-sm text-gray-400 dark:text-gray-500">
-                <a href="{{ route('home') }}"
-                    class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">&larr; Volver al inicio</a>
-            </p>
         </div>
     </div>
 @endsection
