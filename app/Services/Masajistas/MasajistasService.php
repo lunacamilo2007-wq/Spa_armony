@@ -20,7 +20,7 @@ class MasajistasService
             });
         }
 
-        return $query->get();
+        return $query->paginate(10);
     }
     /**
      * Crear masajista + servicios en pivot dentro de una transacción.

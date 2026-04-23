@@ -182,7 +182,7 @@
 
                     @if($citasparahoy->count() > 0)
                         <div class="space-y-4">
-                            @foreach($citasparahoy as $cita)
+                            @foreach($citasparahoy->take(3) as $cita)
                                 <div class="flex items-center gap-4 p-4 rounded-lg bg-surface-50 dark:bg-surface-700/50">
                                     {{-- Avatar --}}
                                     <div
@@ -210,6 +210,9 @@
                                     </div>
                                 </div>
                             @endforeach
+                            @if ($citasparahoy->count() > 3)
+                                <div class="align-right"><p>Más {{ $citasparahoy->count()-3 }} citas </p></div>
+                            @endif
                         </div>
                     @else
                         <p class="text-gray-500 dark:text-gray-400 text-center py-8">No hay citas por hoy</p>

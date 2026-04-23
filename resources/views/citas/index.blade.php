@@ -127,10 +127,13 @@
                     <p class="text-primary-600 text-sm mt-0.5 capitalize" x-show="view === 'list'"
                         x-text="selectedDateFormatted" style="display: none;"></p>
 
-                    <div x-show="view === 'list' && masajistasDelDia.length > 0" class="mt-3 animate-fade-in" style="display: none;">
+                    <div x-show="view === 'list' && masajistasDelDia.length > 0" class="mt-3 animate-fade-in"
+                        style="display: none;">
                         <div class="inline-flex flex-col">
-                            <label for="filtro_masajista" class="label-field text-xs text-gray-500 mb-1">Filtrar por masajista:</label>
-                            <select id="filtro_masajista" x-model="selectedMasajista" @change="filterCitas()" class="select-field py-1.5 px-3 text-sm min-w-[200px]">
+                            <label for="filtro_masajista" class="label-field text-xs text-gray-500 mb-1">Filtrar por
+                                masajista:</label>
+                            <select id="filtro_masajista" x-model="selectedMasajista" @change="filterCitas()"
+                                class="select-field py-1.5 px-3 text-sm min-w-[200px]">
                                 <option value="">Todos los masajistas</option>
                                 <template x-for="mas in masajistasDelDia" :key="mas.id">
                                     <option :value="mas.id" x-text="mas.nombre"></option>
@@ -168,11 +171,9 @@
             <div x-show="view === 'list'" style="display: none;" class="animate-fade-in">
                 <div class="space-y-4" id="citas-list-container">
                     @forelse($citas as $cita)
-                        <div class="card p-6 cita-card" 
-                            data-date="{{ $cita->fecha->format('Y-m-d') }}" 
-                            data-masajista-id="{{ $cita->masajista }}" 
-                            data-masajista-nombre="{{ $cita->masajistaRel->nombre ?? 'Desconocido' }}"
-                            x-data="{ open: false }"
+                        <div class="card p-6 cita-card" data-date="{{ $cita->fecha->format('Y-m-d') }}"
+                            data-masajista-id="{{ $cita->masajista }}"
+                            data-masajista-nombre="{{ $cita->masajistaRel->nombre ?? 'Desconocido' }}" x-data="{ open: false }"
                             :class="{ 'relative z-50': open }" style="display: none;">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-4">
                                 {{-- Avatar + Client Info --}}
@@ -392,6 +393,13 @@
                                 meridiem: false,
                                 hour12: false
                             },
+                            dayMaxEvents: 2,
+                            moreLinkClick: (info) => {
+                                let d = info.date;
+                                let dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                                this.showDate(dateStr);
+                                return 'none';
+                            },
                             dateClick: (info) => {
                                 this.showDate(info.dateStr);
                             },
@@ -428,7 +436,7 @@
                             if (card.dataset.date === this.selectedDate) {
                                 card.style.display = 'block';
                                 count++;
-                                
+
                                 let mId = card.dataset.masajistaId;
                                 let mNombre = card.dataset.masajistaNombre;
                                 if (mId && mNombre) {
@@ -439,7 +447,7 @@
                             }
                         });
 
-                        this.masajistasDelDia = Array.from(masajistasMap, ([id, nombre]) => ({id, nombre}));
+                        this.masajistasDelDia = Array.from(masajistasMap, ([id, nombre]) => ({ id, nombre }));
 
                         let emptyState = document.getElementById('empty-day-state');
                         if (emptyState) {

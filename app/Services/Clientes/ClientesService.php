@@ -17,7 +17,7 @@ class ClientesService
             });
         }
 
-        return $query->get();
+        return $query->paginate(20);
     }
     public function create(array $data): Clientes
     {

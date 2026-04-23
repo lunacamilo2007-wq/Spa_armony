@@ -82,6 +82,7 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-6">{{ $clientes->withQueryString()->links() }}</div>
         </div>
     </div>
 @endsection

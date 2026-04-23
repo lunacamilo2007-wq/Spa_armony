@@ -84,7 +84,6 @@ class AdminController extends Controller
         $citasparahoy = Citas::with(['cliente', 'masajistaRel', 'servicios'])
             ->whereBetween('fecha', [now(), now()->endOfDay()])
             ->orderBy('fecha', 'asc')
-            ->limit(5)
             ->get();
 
         return view('dashboard', compact(

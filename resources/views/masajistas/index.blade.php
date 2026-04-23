@@ -67,6 +67,7 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-6">{{ $masajistas->withQueryString()->links() }}</div>
         </div>
     </div>
 @endsection

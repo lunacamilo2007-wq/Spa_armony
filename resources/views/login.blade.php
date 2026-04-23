@@ -44,7 +44,7 @@
                                 class="input-field pr-10 @error('contrasena') border-red-500 focus:border-red-500 focus:ring-red-500/20 @enderror"
                                 placeholder="Ingresa tu contraseña">
                             <button type="button" @click="showPassword = !showPassword"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                                 <svg x-show="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
