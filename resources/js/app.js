@@ -5,18 +5,6 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 Alpine.start();
 
-// ─── Dark Mode Toggle ────────────────────────────────────────────────────
-window.toggleDarkMode = function () {
-    const html = document.documentElement;
-    html.classList.toggle('dark');
-    localStorage.setItem('darkMode', html.classList.contains('dark') ? 'true' : 'false');
-};
-
-// Apply saved dark mode preference
-if (localStorage.getItem('darkMode') === 'true' ||
-    (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark');
-}
 
 // ─── Notification Helper ─────────────────────────────────────────────────
 window.showNotification = function (message, type = 'success') {

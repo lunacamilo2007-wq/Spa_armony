@@ -7,7 +7,7 @@ $classes = match($estado) {
     'confirmada' => 'badge-confirmada',
     'cancelada'  => 'badge-cancelada',
     'finalizada' => 'badge-finalizada',
-    default      => 'badge bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+    default      => 'badge bg-gray-100 text-gray-800',
 };
 $labels = match($estado) {
     'pendiente'  => 'Pendiente',

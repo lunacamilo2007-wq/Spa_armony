@@ -39,12 +39,12 @@ $maxWidthClass = match($maxWidth) {
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="relative bg-white dark:bg-surface-800 rounded-2xl shadow-xl {{ $maxWidthClass }} w-full overflow-hidden">
+             class="relative bg-white rounded-2xl shadow-xl {{ $maxWidthClass }} w-full overflow-hidden">
 
             @if($title)
-                <div class="px-6 py-4 border-b border-gray-100 dark:border-surface-700 flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $title }}</h3>
-                    <button @click="open = false" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-surface-700 transition-colors">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">{{ $title }}</h3>
+                    <button @click="open = false" class="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
                 </div>

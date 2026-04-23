@@ -18,7 +18,7 @@
                     <div class="flex items-start justify-between">
                         <span class="text-sm font-semibold text-gray-500">Citas de Hoy</span>
                         <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor"
+                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -36,7 +36,7 @@
                     <div class="flex items-start justify-between">
                         <span class="text-sm font-semibold text-gray-500">Citas Pendientes</span>
                         <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor"
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -54,7 +54,7 @@
                     <div class="flex items-start justify-between">
                         <span class="text-sm font-semibold text-gray-500">Total de Citas</span>
                         <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor"
+                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -174,19 +174,19 @@
                 {{-- Recent Citas --}}
                 <div class="lg:col-span-2 card p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Citas para hoy</h2>
+                        <h2 class="text-lg font-semibold text-gray-900">Citas para hoy</h2>
                         <a href="{{ route('citas.index', ['date' => now()->timezone('America/Bogota')->format('Y-m-d')]) }}"
-                            class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium">Ver
+                            class="text-sm text-primary-600 hover:text-primary-700 font-medium">Ver
                             las citas de hoy &rarr;</a>
                     </div>
 
                     @if($citasparahoy->count() > 0)
                         <div class="space-y-4">
                             @foreach($citasparahoy->take(3) as $cita)
-                                <div class="flex items-center gap-4 p-4 rounded-lg bg-surface-50 dark:bg-surface-700/50">
+                                <div class="flex items-center gap-4 p-4 rounded-lg bg-surface-50">
                                     {{-- Avatar --}}
                                     <div
-                                        class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-700 dark:text-primary-400 font-bold text-sm shrink-0">
+                                        class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-bold text-sm shrink-0">
                                         {{ strtoupper(substr($cita->cliente->nombre ?? '?', 0, 2)) }}
                                     </div>
 
@@ -194,10 +194,10 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2">
                                             <span
-                                                class="font-medium text-gray-900 dark:text-white truncate">{{ $cita->cliente->nombre ?? 'N/A' }}</span>
+                                                class="font-medium text-gray-900 truncate">{{ $cita->cliente->nombre ?? 'N/A' }}</span>
                                             <span class="badge-{{ $cita->estado }}">{{ ucfirst($cita->estado) }}</span>
                                         </div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                                        <div class="text-sm text-gray-500 mt-0.5">
                                             {{ $cita->fecha->format('d M Y, H:i') }} ·
                                             {{ $cita->masajistaRel->nombre ?? 'N/A' }}
                                         </div>
@@ -215,7 +215,7 @@
                             @endif
                         </div>
                     @else
-                        <p class="text-gray-500 dark:text-gray-400 text-center py-8">No hay citas por hoy</p>
+                        <p class="text-gray-500 text-center py-8">No hay citas por hoy</p>
                     @endif
                 </div>
 
