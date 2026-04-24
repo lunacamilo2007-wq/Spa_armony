@@ -44,28 +44,66 @@ class UpdateCitasRequest extends FormRequest
             }
 
             if ($this->fecha && $this->masajista) {
-                $conflicto = Citas::where('masajista', $this->masajista)
-                    ->where('fecha', $this->fecha)
+                $fechaInicio = \Carbon\Carbon::parse($this->fecha);
+                $minutosTotales = count((array) $this->servicios) * 60;
+                if ($minutosTotales === 0) $minutosTotales = 60;
+                $fechaFin = $fechaInicio->copy()->addMinutes($minutosTotales);
+
+                $citasExistentes = Citas::where('masajista', $this->masajista)
+                    ->whereDate('fecha', $fechaInicio->toDateString())
                     ->whereNotIn('estado', ['cancelada'])
                     ->where('id_cita', '!=', $citaId)
-                    ->exists();
+                    ->with('servicios')
+                    ->get();
+
+                $conflicto = false;
+                foreach ($citasExistentes as $cita) {
+                    $citaInicio = \Carbon\Carbon::parse($cita->fecha);
+                    $serviciosCita = $cita->servicios->count();
+                    $minsCita = ($serviciosCita > 0 ? $serviciosCita : 1) * 60;
+                    $citaFin = $citaInicio->copy()->addMinutes($minsCita);
+
+                    if ($fechaInicio < $citaFin && $fechaFin > $citaInicio) {
+                        $conflicto = true;
+                        break;
+                    }
+                }
 
                 if ($conflicto) {
                     $validator->errors()->add('masajista',
-                        'El masajista ya tiene una cita agendada en ese horario.');
+                        'El masajista ya tiene una cita agendada en ese rango de tiempo.');
                 }
             }
 
             if ($this->fecha && $this->habitacion) {
-                $conflictoHab = Citas::where('habitacion', $this->habitacion)
-                    ->where('fecha', $this->fecha)
+                $fechaInicio = \Carbon\Carbon::parse($this->fecha);
+                $minutosTotales = count((array) $this->servicios) * 60;
+                if ($minutosTotales === 0) $minutosTotales = 60;
+                $fechaFin = $fechaInicio->copy()->addMinutes($minutosTotales);
+
+                $citasExistentesHab = Citas::where('habitacion', $this->habitacion)
+                    ->whereDate('fecha', $fechaInicio->toDateString())
                     ->whereNotIn('estado', ['cancelada'])
                     ->where('id_cita', '!=', $citaId)
-                    ->exists();
+                    ->with('servicios')
+                    ->get();
+
+                $conflictoHab = false;
+                foreach ($citasExistentesHab as $cita) {
+                    $citaInicio = \Carbon\Carbon::parse($cita->fecha);
+                    $serviciosCita = $cita->servicios->count();
+                    $minsCita = ($serviciosCita > 0 ? $serviciosCita : 1) * 60;
+                    $citaFin = $citaInicio->copy()->addMinutes($minsCita);
+
+                    if ($fechaInicio < $citaFin && $fechaFin > $citaInicio) {
+                        $conflictoHab = true;
+                        break;
+                    }
+                }
 
                 if ($conflictoHab) {
                     $validator->errors()->add('habitacion',
-                        'La habitación ya está ocupada en ese horario.');
+                        'La habitación ya está ocupada en ese rango de tiempo.');
                 }
             }
         });
