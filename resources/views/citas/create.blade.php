@@ -113,7 +113,7 @@
                                 </div>
 
                                 {{-- Select Cliente Existente (Searchable) --}}
-                                <div x-show="esNuevoCliente === '0'" x-transition class="space-y-4 relative z-50" >
+                                <div x-show="esNuevoCliente === '0'" x-transition class="space-y-4 relative z-30" >
                                     <div class="relative">
                                         <label for="search_cliente" class="label-field">
                                             Seleccionar Cliente <span class="text-red-500">*</span>

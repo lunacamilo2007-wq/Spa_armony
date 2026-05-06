@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Habitaciones\StoreHabitacionRequest;
 use App\Http\Requests\Habitaciones\UpdateHabitacionRequest;
 use App\Models\Habitacion;
 use App\Services\Habitaciones\HabitacionesService;
@@ -10,7 +9,9 @@ use Illuminate\Http\Request;
 
 class HabitacionesController extends Controller
 {
-    public function __construct(protected HabitacionesService $service) {}
+    public function __construct(protected HabitacionesService $service)
+    {
+    }
 
     public function index(Request $request)
     {
@@ -24,9 +25,9 @@ class HabitacionesController extends Controller
         return view('habitaciones.create');
     }
 
-    public function store(StoreHabitacionRequest $request)
+    public function store(Request $request)
     {
-        $this->service->create($request->validated());
+        $this->service->create(['estado' => 'activo']);
 
         return redirect()->route('habitaciones.index')
             ->with('success', 'Habitación creada exitosamente.');
@@ -34,7 +35,7 @@ class HabitacionesController extends Controller
 
     public function edit(Habitacion $habitacion)
     {
-        return view('habitaciones.edit', compact('habitacion'));
+        //return view('habitaciones.edit', compact('habitacion'));
     }
 
     public function update(UpdateHabitacionRequest $request, Habitacion $habitacion)
@@ -51,6 +52,14 @@ class HabitacionesController extends Controller
 
         return redirect()->route('habitaciones.index')
             ->with('success', 'Habitación eliminada exitosamente.');
+    }
+
+    public function destroyLast()
+    {
+        $this->service->deleteLast();
+
+        return redirect()->route('habitaciones.index')
+            ->with('success', 'Última habitación eliminada exitosamente.');
     }
 
     public function toggleEstado(Habitacion $habitacion)

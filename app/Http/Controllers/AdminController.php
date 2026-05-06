@@ -82,7 +82,7 @@ class AdminController extends Controller
         $totalMasajistas = Masajista::count();
         $totalServicios = Servicios::count();
         $totalHabitaciones = Habitacion::count();
-        $habitacionesActivas = Habitacion::where('estado', 'activo')->count();
+        //$habitacionesActivas = Habitacion::where('estado', 'activo')->count();
 
         $citasparahoy = Citas::with(['cliente', 'masajistaRel', 'servicios'])
             ->whereBetween('fecha', [now(), now()->endOfDay()])
@@ -100,7 +100,7 @@ class AdminController extends Controller
             'totalMasajistas',
             'totalServicios',
             'totalHabitaciones',
-            'habitacionesActivas',
+            //'habitacionesActivas',
             'citasparahoy',
         ));
     }

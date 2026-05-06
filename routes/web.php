@@ -30,6 +30,7 @@ Route::middleware('auth:admin')->group(function () {
 
     Route::resource('servicios', ServiciosController::class);
 
+    Route::delete('habitaciones/destroy-last', [HabitacionesController::class, 'destroyLast'])->name('habitaciones.destroy-last');
     Route::resource('habitaciones', HabitacionesController::class, ['parameters' => ['habitaciones' => 'habitacion']]);
     Route::patch('habitaciones/{habitacion}/toggle-estado', [HabitacionesController::class, 'toggleEstado'])->name('habitaciones.toggle-estado');
 

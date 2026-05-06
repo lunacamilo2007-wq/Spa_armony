@@ -48,4 +48,13 @@ class HabitacionesService
     {
         Habitacion::findOrFail($id)->delete();
     }
+
+    public function deleteLast(): void
+    {
+        $habitacion = Habitacion::latest('id')->first();
+        if ($habitacion) {
+            $habitacion->delete();
+            \Illuminate\Support\Facades\DB::statement('ALTER TABLE habitaciones AUTO_INCREMENT = 1');
+        }
+    }
 }

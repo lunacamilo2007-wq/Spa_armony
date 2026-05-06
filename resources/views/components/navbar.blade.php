@@ -1,5 +1,5 @@
 {{-- Navbar Component --}}
-<header class="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-100 transition-colors duration-300"
+<header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100 transition-colors duration-300"
     id="main-navbar">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
