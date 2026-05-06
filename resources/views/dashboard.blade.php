@@ -184,18 +184,7 @@
                                 </svg>
                             </div>
                             <span class="font-medium text-gray-700">Ver Servicios</span>
-                        </a>
-                        <a href="{{ route('habitaciones.index') }}"
-                            class="flex items-center gap-3 p-3 rounded-lg hover:bg-rose-50 transition-colors group">
-                            <div
-                                class="w-10 h-10 rounded-lg bg-rose-100 flex items-center justify-center group-hover:bg-rose-200 transition-colors">
-                                <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 16l4-4m0 0l4 4m-4-4V5m0 16H9" />
-                                </svg>
-                            </div>
-                            <span class="font-medium text-gray-700">Ver Habitaciones</span>
-                        </a>
+                        </a>                        
                     </div>
                 </div>
 

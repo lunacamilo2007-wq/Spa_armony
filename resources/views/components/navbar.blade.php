@@ -51,6 +51,16 @@
                         Masajistas
                     </span>
                 </a>
+                <a href="{{ route('habitaciones.index') }}"
+                    class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('habitaciones.*') ? 'text-primary-700 bg-primary-50' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition-colors">
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 16l4-4m0 0l4 4m-4-4V5m0 16H9" />
+                        </svg>
+                        Habitaciones
+                    </span>
+                </a>
                 <a href="{{ route('citas.create') }}" class="btn-primary text-sm ml-2" id="btn-nueva-cita">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -93,6 +103,8 @@
             class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Citas</a>
         <a href="{{ route('masajistas.index') }}"
             class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Masajistas</a>
+        <a href="{{ route('habitaciones.index') }}"
+            class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Habitaciones</a>
         <a href="{{ route('citas.create') }}" class="block btn-primary text-sm text-center mt-2">+ Nueva Cita</a>
         <form method="POST" action="{{ route('logout') }}" class="mt-2" id="logout-form-mobile">
             @csrf
