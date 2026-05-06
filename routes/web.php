@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\ServiciosController;
-use App\Http\Controllers\CLienteController;
-use App\Http\Controllers\CitasController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CitasController;
+use App\Http\Controllers\CLienteController;
+use App\Http\Controllers\HabitacionesController;
 use App\Http\Controllers\masajistasController;
-
+use App\Http\Controllers\ServiciosController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +29,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('masajistas', masajistasController::class);
 
     Route::resource('servicios', ServiciosController::class);
+
+    Route::resource('habitaciones', HabitacionesController::class, ['parameters' => ['habitaciones' => 'habitacion']]);
+    Route::patch('habitaciones/{habitacion}/toggle-estado', [HabitacionesController::class, 'toggleEstado'])->name('habitaciones.toggle-estado');
 
     Route::resource('clientes', CLienteController::class);
 

@@ -263,16 +263,17 @@
                                 <div>
                                     <label for="habitacion" class="label-field">Habitación N° <span
                                             class="text-red-500">*</span></label>
-                                    {{-- <input type="number" name="habitacion" id="habitacion" value="{{ old('habitacion') }}"
-                                        min="1" class="input-field"> --}}
                                     <select name="habitacion" id="habitacion" class="input-field">
                                         <option value="">Seleccione una habitación...</option>
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <option value="{{ $i }}" {{ old('habitacion') == $i ? 'selected' : '' }}>
-                                                {{ $i }}
+                                        @foreach($habitacionesActivas as $habitacion)
+                                            <option value="{{ $habitacion->id }}" {{ old('habitacion') == $habitacion->id ? 'selected' : '' }}>
+                                                Habitación {{ $habitacion->id }}
                                             </option>
-                                        @endfor
+                                        @endforeach
                                     </select>
+                                    @error('habitacion')
+                                        <span class="text-sm text-red-600 mt-1 block">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 {{-- Masajista --}}

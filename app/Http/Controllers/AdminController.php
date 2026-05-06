@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Citas;
 use App\Models\Clientes;
+use App\Models\Habitacion;
 use App\Models\Masajista;
 use App\Models\Servicios;
 use Illuminate\Http\Request;
@@ -80,6 +81,8 @@ class AdminController extends Controller
         $totalClientes = Clientes::count();
         $totalMasajistas = Masajista::count();
         $totalServicios = Servicios::count();
+        $totalHabitaciones = Habitacion::count();
+        $habitacionesActivas = Habitacion::where('estado', 'activo')->count();
 
         $citasparahoy = Citas::with(['cliente', 'masajistaRel', 'servicios'])
             ->whereBetween('fecha', [now(), now()->endOfDay()])
@@ -96,6 +99,8 @@ class AdminController extends Controller
             'totalClientes',
             'totalMasajistas',
             'totalServicios',
+            'totalHabitaciones',
+            'habitacionesActivas',
             'citasparahoy',
         ));
     }

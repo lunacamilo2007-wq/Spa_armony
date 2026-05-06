@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Citas extends Model
 {
-    protected $table = "citas";
+    protected $table = 'citas';
 
-    protected $primaryKey = "id_cita";
+    protected $primaryKey = 'id_cita';
 
     public $incrementing = true;
 
-    protected $keyType = "int";
+    protected $keyType = 'int';
 
     protected $fillable = [
         'fecha',
@@ -50,6 +50,11 @@ class Citas extends Model
             'id_cita',
             'id_servicio'
         )->withPivot('duracion')->withTimestamps();
+    }
+
+    public function habitacionRel(): BelongsTo
+    {
+        return $this->belongsTo(Habitacion::class, 'habitacion', 'id');
     }
 
     public function getTotalAttribute(): int
