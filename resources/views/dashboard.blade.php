@@ -215,7 +215,7 @@
                             @endif
                         </div>
                     @else
-                        <p class="text-gray-500 text-center py-8">No hay citas por hoy</p>
+                        <p class="text-gray-500 text-center py-8">No hay citas por el momento</p>
                     @endif
                 </div>
 
